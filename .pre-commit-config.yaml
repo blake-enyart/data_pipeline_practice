@@ -1,0 +1,31 @@
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+
+  - repo: local
+    hooks:
+      - id: tests
+        name: unit tests
+        language: system
+        entry: inv test
+        pass_filenames: false
+        stages:
+          - push
+
+  - repo: local
+    hooks:
+      - id: clean-notebooks
+        name: clean notebooks
+        language: system
+        entry: jupyter nbconvert --clear-output --inplace
+        types: ["file", "jupyter"]
