@@ -6,6 +6,9 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: requirements-txt-fixer
 
   - repo: https://github.com/psf/black
     rev: stable
