@@ -6,8 +6,6 @@ import tempfile
 import time
 from pathlib import Path
 
-import requests
-import toml
 from invoke import task, Responder
 from klaxon import klaxon
 
@@ -31,15 +29,15 @@ def install_hooks(c):
 
     c.run("pre-commit install -t pre-push")
 
-    # this fixes a potentially broken shebang line in git hooks
+    # # this fixes a potentially broken shebang line in git hooks
 
-    for hook in Path(".git", "hooks").iterdir():
+    # for hook in Path(".git", "hooks").iterdir():
 
-        hook.write_text(
-            hook.read_text().replace(
-                "#!/usr/bin/env python3.8", "#!/usr/bin/env python3"
-            )
-        )
+    #     hook.write_text(
+    #         hook.read_text().replace(
+    #             "#!/usr/bin/env python3.8", "#!/usr/bin/env python3"
+    #         )
+    #     )
 
 
 @task
