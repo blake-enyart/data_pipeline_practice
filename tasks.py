@@ -9,6 +9,8 @@ from pathlib import Path
 from invoke import task, Responder
 from klaxon import klaxon
 
+app = "data_pipeline_practice"
+
 
 @task
 def clean(c):
@@ -60,7 +62,7 @@ def check_formatting(c):
 
 
 @task
-def deploy(c, profile="nutrien", region="us-east-2", force=False):
+def deploy(c, profile="nutrien", region="us-east-2", force=False, app=app):
     """Deploy cloudformation stack(s)."""
 
     c.run(
@@ -70,11 +72,11 @@ def deploy(c, profile="nutrien", region="us-east-2", force=False):
         env={"AWS_DEFAULT_REGION": region},
     )
 
-    klaxon(title="nutrien-data-infra", subtitle="deployed cdk stack")
+    klaxon(title=app, subtitle="deployed cdk stack")
 
 
 @task
-def destroy(c, profile="nutrien", region="us-east-2", force=False):
+def destroy(c, profile="nutrien", region="us-east-2", force=False, app=app):
     """Tear-down cloudformation stack(s)."""
 
     responder = Responder(
@@ -88,7 +90,7 @@ def destroy(c, profile="nutrien", region="us-east-2", force=False):
         env={"AWS_DEFAULT_REGION": region},
     )
 
-    klaxon(title="nutrien-data-infra", subtitle="destroyed cdk stack")
+    klaxon(title=app, subtitle="destroyed cdk stack")
 
 
 @task
