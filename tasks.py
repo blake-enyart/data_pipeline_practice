@@ -11,8 +11,6 @@ import toml
 from invoke import task, Responder
 from klaxon import klaxon
 
-from nutrien_data_infra.models.farm import Farm
-
 
 @task
 def clean(c):
@@ -81,7 +79,9 @@ def deploy(c, profile="nutrien", region="us-east-2", force=False):
 def destroy(c, profile="nutrien", region="us-east-2", force=False):
     """Tear-down cloudformation stack(s)."""
 
-    responder = Responder(pattern="Are you sure you want to delete.*", response="y\n")
+    responder = Responder(
+        pattern="Are you sure you want to delete.*", response="y\n"
+    )
 
     c.run(
         f"cdk destroy --profile={profile}",
@@ -98,7 +98,9 @@ def diff(c, profile="nutrien", region="us-east-2"):
     """Compare current cdk stack to what was previously deployed."""
 
     c.run(
-        f"cdk diff --profile={profile}", pty=True, env={"AWS_DEFAULT_REGION": region},
+        f"cdk diff --profile={profile}",
+        pty=True,
+        env={"AWS_DEFAULT_REGION": region},
     )
 
 
@@ -107,5 +109,7 @@ def synth(c, profile="nutrien", region="us-east-2"):
     """Render cdk cloudformation template."""
 
     c.run(
-        f"cdk synth --profile={profile}", pty=True, env={"AWS_DEFAULT_REGION": region},
+        f"cdk synth --profile={profile}",
+        pty=True,
+        env={"AWS_DEFAULT_REGION": region},
     )
