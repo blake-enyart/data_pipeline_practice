@@ -16,3 +16,24 @@ exclude = '''
   | dist
 )/
 '''
+
+[tool.poetry]
+name = "data_pipeline_practice"
+version = "0.1.0"
+description = "Data Pipeline Sandbox"
+authors = ["Blake Enyart <blake.enyart@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+"aws-cdk.aws-s3" = "^1.75.0"
+"aws-cdk.aws-apigatewayv2-integrations" = "^1.75.0"
+"aws-cdk.aws-apigatewayv2" = "^1.75.0"
+"aws-cdk.aws-apigateway" = "^1.75.0"
+"aws-cdk.aws-ecs-patterns" = "^1.75.0"
+"aws-cdk.aws-ecs" = "^1.75.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

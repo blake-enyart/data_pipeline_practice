@@ -9,7 +9,12 @@ from pathlib import Path
 from invoke import task, Responder
 from klaxon import klaxon
 
-app = "data_pipeline_practice"
+APP = "data_pipeline_practice"
+AWS_PROFILE = "nutrien"
+AWS_REGION = "us-east-2"
+
+# Must separate these by spaces and indicate directories with trailing /
+BLACK_FILEPATH_STR = f"{APP}/ lambda/"
 
 
 @task
@@ -52,17 +57,17 @@ def uninstall_hooks(c):
 @task(aliases=["black"])
 def format(c):
     """Auto-format Python modules."""
-    c.run("black *.py data_pipeline_practice/")
+    c.run(f"black *.py {BLACK_FILEPATH_STR}")
 
 
 @task(aliases=["check-black"])
 def check_formatting(c):
     """Check that files conform to black standards."""
-    c.run("black --check *.py data_pipeline_practice/")
+    c.run(f"black --check *.py {BLACK_FILEPATH_STR}")
 
 
 @task
-def deploy(c, profile="nutrien", region="us-east-2", force=False, app=app):
+def deploy(c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP):
     """Deploy cloudformation stack(s)."""
 
     c.run(
@@ -72,11 +77,11 @@ def deploy(c, profile="nutrien", region="us-east-2", force=False, app=app):
         env={"AWS_DEFAULT_REGION": region},
     )
 
-    klaxon(title=app, subtitle="deployed cdk stack")
+    klaxon(title=app, subtitle="deployed CDK stack")
 
 
 @task
-def destroy(c, profile="nutrien", region="us-east-2", force=False, app=app):
+def destroy(c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP):
     """Tear-down cloudformation stack(s)."""
 
     responder = Responder(
@@ -90,12 +95,12 @@ def destroy(c, profile="nutrien", region="us-east-2", force=False, app=app):
         env={"AWS_DEFAULT_REGION": region},
     )
 
-    klaxon(title=app, subtitle="destroyed cdk stack")
+    klaxon(title=app, subtitle="destroyed CDK stack")
 
 
 @task
-def diff(c, profile="nutrien", region="us-east-2"):
-    """Compare current cdk stack to what was previously deployed."""
+def diff(c, profile=AWS_PROFILE, region=AWS_REGION):
+    """Compare current CDK stack to what was previously deployed."""
 
     c.run(
         f"cdk diff --profile={profile}",
@@ -105,7 +110,7 @@ def diff(c, profile="nutrien", region="us-east-2"):
 
 
 @task
-def synth(c, profile="nutrien", region="us-east-2"):
+def synth(c, profile=AWS_PROFILE, region=AWS_REGION):
     """Render cdk cloudformation template."""
 
     c.run(
