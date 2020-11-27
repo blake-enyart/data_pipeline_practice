@@ -34,7 +34,6 @@ python = "^3.8"
 requests = "^2.25.0"
 
 [tool.poetry.dev-dependencies]
-"aws-cdk.aws-ecr" = "^1.75.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
