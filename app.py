@@ -12,10 +12,12 @@ PROJECT_NAME = os.environ["PROJECT_NAME"]
 STAGE = os.environ["STAGE"]
 
 app = core.App()
-DataPipelinePracticeStack(app, "data-pipeline-practice")
+data_pipeline_practice_stack = DataPipelinePracticeStack(
+    app, "data-pipeline-practice"
+)
 
-# core.Tags.of(DataPipelinePracticeStack).add(
-#     "Project", f"{ORG_NAME}-{PROJECT_NAME}-{STAGE}"
-# )
+core.Tags.of(data_pipeline_practice_stack).add(
+    "Project", f"{ORG_NAME}-{PROJECT_NAME}-{STAGE}"
+)
 
 app.synth()
