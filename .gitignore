@@ -3,6 +3,8 @@ package-lock.json
 __pycache__
 .pytest_cache
 .env
+**/**/*.env
+**/*.env
 *.env
 *.env.json
 *.egg-info
