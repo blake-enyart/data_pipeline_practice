@@ -60,8 +60,8 @@ def connect_to_endpoint(url, headers):
 
 
 def publish_to_kinesis_stream(kinesis_records: list, stream_name: str):
-    session = boto3.session.Session(profile_name="nutrien")
-    kinesis_client = session.client("kinesis", "us-east-2")
+    kinesis_client = boto3.client("kinesis", "us-east-2")
+
     kinesis_client.put_records(
         Records=kinesis_records, StreamName=stream_name,
     )

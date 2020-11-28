@@ -5,7 +5,7 @@ FROM python:3.8
 WORKDIR /twitter_stream_app
 
 # install dependencies
-RUN pip install poetry
+RUN pip install poetry boto3
 
 # copy the dependencies file to the working directory
 COPY pyproject.toml .
