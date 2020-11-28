@@ -25,13 +25,15 @@ authors = ["Blake Enyart <blake.enyart@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-"aws-cdk.aws-s3" = "^1.75.0"
-"aws-cdk.aws-apigatewayv2-integrations" = "^1.75.0"
-"aws-cdk.aws-apigatewayv2" = "^1.75.0"
-"aws-cdk.aws-apigateway" = "^1.75.0"
-"aws-cdk.aws-ecs-patterns" = "^1.75.0"
-"aws-cdk.aws-ecs" = "^1.75.0"
+"aws-cdk.aws-s3" = "^1.74.0"
+"aws-cdk.aws-apigatewayv2-integrations" = "^1.74.0"
+"aws-cdk.aws-apigatewayv2" = "^1.74.0"
+"aws-cdk.aws-ecs-patterns" = "^1.74.0"
+"aws-cdk.aws-ecs" = "^1.74.0"
 requests = "^2.25.0"
+"aws-solutions-constructs.core" = "^1.74.0"
+"aws-cdk.aws-secretsmanager" = "1.74.0"
+"aws-cdk.aws-iam" = "1.74.0"
 
 [tool.poetry.dev-dependencies]
 

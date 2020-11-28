@@ -1106,72 +1106,6 @@ jsii = ">=1.14.1,<2.0.0"
 publication = ">=0.0.3"
 
 [[package]]
-name = "aws-solutions-constructs.aws-kinesis-firehose-s3"
-version = "1.74.0"
-description = "CDK constructs for defining an interaction between an Amazon Kinesis Data Firehose delivery stream and an Amazon S3 bucket."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-"aws-cdk.aws-iam" = "1.74.0"
-"aws-cdk.aws-kinesisfirehose" = "1.74.0"
-"aws-cdk.aws-kms" = "1.74.0"
-"aws-cdk.aws-logs" = "1.74.0"
-"aws-cdk.aws-s3" = "1.74.0"
-"aws-cdk.core" = "1.74.0"
-"aws-solutions-constructs.core" = "1.74.0"
-constructs = ">=3.2.0,<4.0.0"
-jsii = ">=1.14.1,<2.0.0"
-publication = ">=0.0.3"
-
-[[package]]
-name = "aws-solutions-constructs.aws-kinesis-streams-kinesis-firehose-s3"
-version = "1.74.0"
-description = "CDK constructs for defining an interaction between an Amazon Kinesis Data Stream (KDS), Amazon Kinesis Data Firehose (KDF) delivery stream and an Amazon S3 bucket."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-"aws-cdk.aws-cloudwatch" = "1.74.0"
-"aws-cdk.aws-iam" = "1.74.0"
-"aws-cdk.aws-kinesis" = "1.74.0"
-"aws-cdk.aws-kinesisfirehose" = "1.74.0"
-"aws-cdk.aws-lambda" = "1.74.0"
-"aws-cdk.aws-logs" = "1.74.0"
-"aws-cdk.aws-s3" = "1.74.0"
-"aws-cdk.core" = "1.74.0"
-"aws-solutions-constructs.aws-kinesis-firehose-s3" = "1.74.0"
-"aws-solutions-constructs.aws-kinesis-streams-lambda" = "1.74.0"
-"aws-solutions-constructs.core" = "1.74.0"
-constructs = ">=3.2.0,<4.0.0"
-jsii = ">=1.14.1,<2.0.0"
-publication = ">=0.0.3"
-
-[[package]]
-name = "aws-solutions-constructs.aws-kinesis-streams-lambda"
-version = "1.74.0"
-description = "CDK constructs for defining an interaction between an Amazon Kinesis Data Stream and an AWS Lambda function."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-"aws-cdk.aws-cloudwatch" = "1.74.0"
-"aws-cdk.aws-iam" = "1.74.0"
-"aws-cdk.aws-kinesis" = "1.74.0"
-"aws-cdk.aws-kms" = "1.74.0"
-"aws-cdk.aws-lambda" = "1.74.0"
-"aws-cdk.aws-lambda-event-sources" = "1.74.0"
-"aws-cdk.aws-sqs" = "1.74.0"
-"aws-cdk.core" = "1.74.0"
-"aws-solutions-constructs.core" = "1.74.0"
-constructs = ">=3.2.0,<4.0.0"
-jsii = ">=1.14.1,<2.0.0"
-publication = ">=0.0.3"
-
-[[package]]
 name = "aws-solutions-constructs.core"
 version = "1.74.0"
 description = "Core CDK Construct for patterns library"
@@ -1209,32 +1143,6 @@ jsii = ">=1.14.1,<2.0.0"
 publication = ">=0.0.3"
 
 [[package]]
-name = "boto3"
-version = "1.16.25"
-description = "The AWS SDK for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-botocore = ">=1.19.25,<1.20.0"
-jmespath = ">=0.7.1,<1.0.0"
-s3transfer = ">=0.3.0,<0.4.0"
-
-[[package]]
-name = "botocore"
-version = "1.19.25"
-description = "Low-level, data-driven core of boto 3."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-jmespath = ">=0.7.1,<1.0.0"
-python-dateutil = ">=2.1,<3.0.0"
-urllib3 = {version = ">=1.25.4,<1.27", markers = "python_version != \"3.4\""}
-
-[[package]]
 name = "cattrs"
 version = "1.1.1"
 description = "Composable complex class support for attrs."
@@ -1266,7 +1174,7 @@ python-versions = "*"
 
 [[package]]
 name = "constructs"
-version = "3.2.42"
+version = "3.2.46"
 description = "A programming model for composable configuration"
 category = "main"
 optional = false
@@ -1283,14 +1191,6 @@ description = "Internationalized Domain Names in Applications (IDNA)"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[[package]]
-name = "jmespath"
-version = "0.10.0"
-description = "JSON Matching Expressions"
-category = "main"
-optional = false
-python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "jsii"
@@ -1344,17 +1244,6 @@ security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
-name = "s3transfer"
-version = "0.3.3"
-description = "An Amazon S3 Transfer Manager"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-botocore = ">=1.12.36,<2.0a.0"
-
-[[package]]
 name = "six"
 version = "1.15.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1386,7 +1275,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c9151cb271112f8d485dd8537eea33c303eb841f02f2bdb208da2964412da9ba"
+content-hash = "84a17917d25a34c85e086445e3e514859b16a189e887bc5eedefde1456e51f3f"
 
 [metadata.files]
 attrs = [
@@ -1629,29 +1518,9 @@ attrs = [
     {file = "aws-cdk.region-info-1.74.0.tar.gz", hash = "sha256:3acf8dc999c69bb10926088199c153c9cd8bb9e40c060b9af2862e61165cb3fd"},
     {file = "aws_cdk.region_info-1.74.0-py3-none-any.whl", hash = "sha256:494e0b8feef033982dae8985b5c1b35cb7ca62bfd20a7727a4025963e42c3f97"},
 ]
-"aws-solutions-constructs.aws-kinesis-firehose-s3" = [
-    {file = "aws-solutions-constructs.aws-kinesis-firehose-s3-1.74.0.tar.gz", hash = "sha256:e244a562742e87153e5b167179da508dabcd930bc7e4d3270668df6bb118f7cc"},
-    {file = "aws_solutions_constructs.aws_kinesis_firehose_s3-1.74.0-py3-none-any.whl", hash = "sha256:6c8c9cf963c7c8cba445a03aa5536cc1e94f31eaa90d1ab58d0c043e22bf28e1"},
-]
-"aws-solutions-constructs.aws-kinesis-streams-kinesis-firehose-s3" = [
-    {file = "aws-solutions-constructs.aws-kinesis-streams-kinesis-firehose-s3-1.74.0.tar.gz", hash = "sha256:6291cec516381bdf746952e22c999d4f2897652ea440d28dba3d5872cdd20d8b"},
-    {file = "aws_solutions_constructs.aws_kinesis_streams_kinesis_firehose_s3-1.74.0-py3-none-any.whl", hash = "sha256:9d2a83a6a58234ae8aaa7c31f191869f66b38de6924e662ffd4422bbabc58f55"},
-]
-"aws-solutions-constructs.aws-kinesis-streams-lambda" = [
-    {file = "aws-solutions-constructs.aws-kinesis-streams-lambda-1.74.0.tar.gz", hash = "sha256:dcf4d99c602b4eaac6d03864c74e9791dadd43a7fa1e49bc0d84909265848c51"},
-    {file = "aws_solutions_constructs.aws_kinesis_streams_lambda-1.74.0-py3-none-any.whl", hash = "sha256:f7b23dfa1f5c46adb49b7060dc7eae48eb676b77cde844811aeb5c16edb52563"},
-]
 "aws-solutions-constructs.core" = [
     {file = "aws-solutions-constructs.core-1.74.0.tar.gz", hash = "sha256:ccbafb3a545f3dac61628632bf1c7ea14a3080123a2560d66e65dc742cec0330"},
     {file = "aws_solutions_constructs.core-1.74.0-py3-none-any.whl", hash = "sha256:e63172263e02ce5677db24ae3745afa5e9e6bbf4f09a66a6a98ea00aa08540bf"},
-]
-boto3 = [
-    {file = "boto3-1.16.25-py2.py3-none-any.whl", hash = "sha256:fb25ec578fe59aee298da2c976e2bcfd79a2eabead386e8e4f68bb3eb4ec50b3"},
-    {file = "boto3-1.16.25.tar.gz", hash = "sha256:13e6ab0abe10b4de54583067d12ed48c8477d91b7a7a8e6097d366a2a3631d17"},
-]
-botocore = [
-    {file = "botocore-1.19.25-py2.py3-none-any.whl", hash = "sha256:4e488351f399501a78b16e1dc466e505ccf63897c936030c56c6d3c37e57939c"},
-    {file = "botocore-1.19.25.tar.gz", hash = "sha256:ccaf3979590b72625b3699d93dabf48f350f9a3304c127fc6830e8ac842b0d96"},
 ]
 cattrs = [
     {file = "cattrs-1.1.1-py3-none-any.whl", hash = "sha256:41398d3cbdda64707a9947c3ffac35116dc8ab5307c2962c02cdd01c96097149"},
@@ -1666,16 +1535,12 @@ chardet = [
     {file = "chardet-3.0.4.tar.gz", hash = "sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae"},
 ]
 constructs = [
-    {file = "constructs-3.2.42-py3-none-any.whl", hash = "sha256:f51ca74c1b68f4e4f910a1020faf33abe9fd33a67b2ee12f51ea2e8b30a5238d"},
-    {file = "constructs-3.2.42.tar.gz", hash = "sha256:f82e2c12e57cfa31c651fe75d221dbd8b8811d89545d3ac8895f9b2cf5f95c42"},
+    {file = "constructs-3.2.46-py3-none-any.whl", hash = "sha256:ec861ced700be8790c857d193ebcfa40bb685f9036f48a00afc6b182ba8866c1"},
+    {file = "constructs-3.2.46.tar.gz", hash = "sha256:8525b8ef0f50f03e4571c816916a2338d3f251000a2cf239528eac381498eb5b"},
 ]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
     {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
-]
-jmespath = [
-    {file = "jmespath-0.10.0-py2.py3-none-any.whl", hash = "sha256:cdf6525904cc597730141d61b36f2e4b8ecc257c420fa2f4549bac2c2d0cb72f"},
-    {file = "jmespath-0.10.0.tar.gz", hash = "sha256:b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9"},
 ]
 jsii = [
     {file = "jsii-1.15.0-py3-none-any.whl", hash = "sha256:8f432c685f6b3edaae66eaf4a3ab9ca9e203de9c59ef0053c88f0922eff9c5b5"},
@@ -1692,10 +1557,6 @@ python-dateutil = [
 requests = [
     {file = "requests-2.25.0-py2.py3-none-any.whl", hash = "sha256:e786fa28d8c9154e6a4de5d46a1d921b8749f8b74e28bde23768e5e16eece998"},
     {file = "requests-2.25.0.tar.gz", hash = "sha256:7f1a0b932f4a60a1a65caa4263921bb7d9ee911957e0ae4a23a6dd08185ad5f8"},
-]
-s3transfer = [
-    {file = "s3transfer-0.3.3-py2.py3-none-any.whl", hash = "sha256:2482b4259524933a022d59da830f51bd746db62f047d6eb213f2f8855dcb8a13"},
-    {file = "s3transfer-0.3.3.tar.gz", hash = "sha256:921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},

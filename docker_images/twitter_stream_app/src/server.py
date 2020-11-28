@@ -1,9 +1,14 @@
 import requests
 import os
 import json
+import boto3
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
+KINESIS_STREAM_NAME = os.environ.get(
+    "KINESIS_STREAM_NAME",
+    "data-pipeline-practice-TwitterStreamStream0A60CA48-7ECBF21U9SWL",
+)
 
 
 def auth():
@@ -30,9 +35,15 @@ def connect_to_endpoint(url, headers):
         "GET", url, headers=headers, stream=True, params=params
     )
     print(response.status_code)
+    batch_payload = []
     for response_line in response.iter_lines():
         if response_line:
             json_response = json.loads(response_line)
+            batch_payload.append(json_response)
+            print(batch_payload)
+            if len(batch_payload) == 5:
+                publish_to_kinesis_stream(batch_payload, KINESIS_STREAM_NAME)
+                batch_payload = []
             print(json.dumps(json_response, indent=4, sort_keys=True))
     if response.status_code != 200:
         raise Exception(
@@ -40,6 +51,13 @@ def connect_to_endpoint(url, headers):
                 response.status_code, response.text
             )
         )
+
+
+def publish_to_kinesis_stream(batch_payload: list, stream_name: str):
+    kinesis_client = boto3.client("kinesis")
+    kinesis_client.put_records(
+        Records=batch_payload, StreamName=stream_name,
+    )
 
 
 def main():
