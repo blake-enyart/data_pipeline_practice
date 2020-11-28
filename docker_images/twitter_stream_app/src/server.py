@@ -2,6 +2,7 @@ import requests
 import os
 import json
 import boto3
+import botocore
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
@@ -35,15 +36,20 @@ def connect_to_endpoint(url, headers):
         "GET", url, headers=headers, stream=True, params=params
     )
     print(response.status_code)
-    batch_payload = []
+    kinesis_records = []
+    shard_count = 1
+
     for response_line in response.iter_lines():
         if response_line:
             json_response = json.loads(response_line)
-            batch_payload.append(json_response)
-            print(batch_payload)
-            if len(batch_payload) == 5:
-                publish_to_kinesis_stream(batch_payload, KINESIS_STREAM_NAME)
-                batch_payload = []
+            kinesis_record = {
+                "Data": response_line,
+                "PartitionKey": str(shard_count),
+            }
+            kinesis_records.append(kinesis_record)
+            if len(kinesis_records) == 5:
+                publish_to_kinesis_stream(kinesis_records, KINESIS_STREAM_NAME)
+                kinesis_records = []
             print(json.dumps(json_response, indent=4, sort_keys=True))
     if response.status_code != 200:
         raise Exception(
@@ -53,10 +59,11 @@ def connect_to_endpoint(url, headers):
         )
 
 
-def publish_to_kinesis_stream(batch_payload: list, stream_name: str):
-    kinesis_client = boto3.client("kinesis")
+def publish_to_kinesis_stream(kinesis_records: list, stream_name: str):
+    session = boto3.session.Session(profile_name="nutrien")
+    kinesis_client = session.client("kinesis", "us-east-2")
     kinesis_client.put_records(
-        Records=batch_payload, StreamName=stream_name,
+        Records=kinesis_records, StreamName=stream_name,
     )
 
 
