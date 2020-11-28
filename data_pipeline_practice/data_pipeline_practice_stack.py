@@ -8,6 +8,7 @@ from aws_cdk import (
     aws_kinesis as kinesis,
     aws_secretsmanager as secretsmanager,
     aws_iam as iam,
+    aws_logs as logs,
 )
 
 from aws_solutions_constructs import (
@@ -29,24 +30,39 @@ class DataPipelinePracticeStack(core.Stack):
             self, "MegaDataPipeline", existing_stream_obj=stream
         )
 
-        # vpc = ec2.Vpc(self, "VPC")
+        vpc = ec2.Vpc(self, "VPC", max_azs=2)
 
-        # ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
-
-        # ecr_repository = ecr.Repository.from_repository_name(
-        #     self, "ecrRepository", repository_name="twitter-stream-app"
-        # )
-
-        # twitter_credentials = secretsmanager.Secret.from_secret_name_v2(
-        #     self,
-        #     "TwitterCredentials",
-        #     'BlakeEnyart/dev/dataPipelinePractice/TwitterAPI'
-        # )
-
-        fargate_cluster = ecs_patterns.QueueProcessingFargateService(
+        ecs_task_role = iam.Role(
             self,
-            "FargateQueueProcessor",
-            cluster=ecs_cluster,
+            "EcsTaskRole",
+            assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
+            description="First pass role for ECS to publish to Kinesis",
+        )
+
+        stream.grant_read_write(ecs_task_role)
+
+        ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
+
+        ecr_repository = ecr.Repository.from_repository_name(
+            self, "ecrRepository", repository_name="twitter-stream-app"
+        )
+
+        twitter_credentials = secretsmanager.Secret.from_secret_name_v2(
+            self,
+            "TwitterCredentials",
+            "BlakeEnyart/dev/dataPipelinePractice/TwitterAPI",
+        )
+
+        ecs_task_definition = ecs.FargateTaskDefinition(
+            self, "FargateTaskDefinition", task_role=ecs_task_role,
+        )
+
+        lg = logs.LogGroup(self, "EcsLogGroup")
+        log = ecs.AwsLogDriver(log_group=lg, stream_prefix="ecs",)
+
+        ecs_container_definition = ecs.ContainerDefinition(
+            self,
+            "EcsContainer",
             image=ecs.ContainerImage.from_ecr_repository(ecr_repository),
             secrets={
                 "TWITTER_API_KEY": ecs.Secret.from_secrets_manager(
@@ -68,4 +84,13 @@ class DataPipelinePracticeStack(core.Stack):
             environment={
                 "KINESIS_STREAM_NAME": data_pipeline.kinesis_stream.stream_name
             },
+            task_definition=ecs_task_definition,
+            logging=log,
+        )
+
+        ecs.FargateService(
+            self,
+            "FargateService",
+            task_definition=ecs_task_definition,
+            cluster=ecs_cluster,
         )

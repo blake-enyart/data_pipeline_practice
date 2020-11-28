@@ -1,8 +1,12 @@
 version: "3.8"
 services:
-  web:
-    build: .
+  app:
+    build:
+      # Build an image from the Dockerfile in the current directory
+      context: .
     ports:
-      - "80:80"
+      - "8080:80"
     env_file:
       - twitter-stream-app.env
+    environment:
+      PORT: "80"
