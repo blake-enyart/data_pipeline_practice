@@ -1,0 +1,37 @@
+repos:
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-aws-credentials
+      - id: detect-private-key
+      - id: requirements-txt-fixer
+
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        language_version: python3
+
+  # Uncomment for usage with invoke command for test suite
+
+  # - repo: local
+  #   hooks:
+  #     - id: tests
+  #       name: unit tests
+  #       language: system
+  #       entry: inv test
+  #       pass_filenames: false
+  #       stages:
+  #         - push
+
+  - repo: local
+    hooks:
+      - id: clean-notebooks
+        name: clean notebooks
+        language: system
+        entry: jupyter nbconvert --clear-output --inplace
+        types: ["file", "jupyter"]

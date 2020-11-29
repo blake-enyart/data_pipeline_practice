@@ -1,0 +1,3 @@
+# Secret files
+*.env
+*.env.json
