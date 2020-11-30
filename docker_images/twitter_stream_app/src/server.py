@@ -49,7 +49,7 @@ def connect_to_endpoint(url, headers):
                 "PartitionKey": str(shard_count),
             }
             kinesis_records.append(kinesis_record)
-            if len(kinesis_records) == 5:
+            if len(kinesis_records) == 100:
                 publish_to_kinesis_stream(kinesis_records, KINESIS_STREAM_NAME)
                 kinesis_records = []
             # print(json.dumps(json_response, indent=4, sort_keys=True))
