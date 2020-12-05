@@ -25,22 +25,22 @@ authors = ["Blake Enyart <blake.enyart@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-"aws-cdk.aws-s3" = "^1.74.0"
-"aws-cdk.aws-apigatewayv2-integrations" = "^1.74.0"
-"aws-cdk.aws-apigatewayv2" = "^1.74.0"
-"aws-cdk.aws-apigateway" = "^1.74.0"
-"aws-cdk.aws-ecs-patterns" = "^1.74.0"
-"aws-cdk.aws-ecs" = "^1.74.0"
+"aws-cdk.aws-s3" = "^1.75.0"
+"aws-cdk.aws-apigatewayv2-integrations" = "^1.75.0"
+"aws-cdk.aws-apigatewayv2" = "^1.75.0"
+"aws-cdk.aws-apigateway" = "^1.75.0"
+"aws-cdk.aws-ecs-patterns" = "^1.75.0"
+"aws-cdk.aws-ecs" = "^1.75.0"
 requests = "^2.25.0"
 boto3 = "^1.16.25"
-"aws-solutions-constructs.core" = "^1.74.0"
-"aws-solutions-constructs.aws-kinesis-streams-kinesis-firehose-s3" = "^1.74.0"
+"aws-solutions-constructs.core" = "^1.75.0"
+"aws-solutions-constructs.aws-kinesis-streams-kinesis-firehose-s3" = "^1.75.0"
 botocore = "^1.19.25"
-"aws-cdk.aws-logs" = "1.74.0"
+"aws-cdk.aws-logs" = "1.75.0"
 
 [tool.poetry.dev-dependencies]
-"aws-cdk.aws-ecr" = "^1.74.0"
-"aws-cdk.aws-kinesis" = "^1.74.0"
+"aws-cdk.aws-ecr" = "^1.75.0"
+"aws-cdk.aws-kinesis" = "^1.75.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
