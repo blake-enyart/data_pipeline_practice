@@ -2,14 +2,13 @@ import requests
 import os
 import json
 import boto3
-import botocore
 import time
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
 KINESIS_STREAM_NAME = os.environ.get(
     "KINESIS_STREAM_NAME",
-    "data-pipeline-practice-TwitterStreamStream0A60CA48-1441CAZQDNQ5V",
+    "data-pipeline-practice-TwitterStreamStream0A60CA48-NNQOKLSTGFFE",
 )
 LOCAL_DEV = os.environ.get("LOCAL_DEV")
 
@@ -43,16 +42,20 @@ def connect_to_endpoint(url, headers):
 
     for response_line in response.iter_lines():
         if response_line:
-            json_response = json.loads(response_line)
+            str_response = response_line.decode("utf-8")
+            # Do custom processing on the payload here
+            str_response = str_response + "\n"
+
+            payload = str_response.encode("utf-8")
+
             kinesis_record = {
-                "Data": response_line,
+                "Data": payload,
                 "PartitionKey": str(shard_count),
             }
             kinesis_records.append(kinesis_record)
             if len(kinesis_records) == 100:
                 publish_to_kinesis_stream(kinesis_records, KINESIS_STREAM_NAME)
                 kinesis_records = []
-            # print(json.dumps(json_response, indent=4, sort_keys=True))
     if response.status_code == 429:
         time.sleep(180)
     elif response.status_code != 200:
