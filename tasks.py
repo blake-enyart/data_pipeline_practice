@@ -36,16 +36,6 @@ def install_hooks(c):
 
     c.run("pre-commit install -t pre-push")
 
-    # # this fixes a potentially broken shebang line in git hooks
-
-    # for hook in Path(".git", "hooks").iterdir():
-
-    #     hook.write_text(
-    #         hook.read_text().replace(
-    #             "#!/usr/bin/env python3.8", "#!/usr/bin/env python3"
-    #         )
-    #     )
-
 
 @task
 def uninstall_hooks(c):
@@ -66,34 +56,54 @@ def check_formatting(c):
     c.run(f"black --check *.py {BLACK_FILEPATH_STR}")
 
 
-@task
-def deploy(c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP):
-    """Deploy cloudformation stack(s)."""
+@task(optional=["stack"])
+def deploy(
+    c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP, stack=None
+):
+    """Deploy CDK CloudFormation stack(s)."""
 
-    c.run(
-        f"cdk deploy --profile={profile} '*'"
-        + (" --require-approval never" if force else ""),
-        pty=True,
-        env={"AWS_DEFAULT_REGION": region},
-    )
+    if stack:
+        c.run(
+            f"cdk deploy --profile={profile} {stack}"
+            + (" --require-approval never" if force else ""),
+            pty=True,
+            env={"AWS_DEFAULT_REGION": region},
+        )
+    else:
+        c.run(
+            f"cdk deploy --profile={profile} '*'"
+            + (" --require-approval never" if force else ""),
+            pty=True,
+            env={"AWS_DEFAULT_REGION": region},
+        )
 
     klaxon(title=app, subtitle="deployed CDK stack")
 
 
-@task
-def destroy(c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP):
-    """Tear-down cloudformation stack(s)."""
+@task(optional=["stack"])
+def destroy(
+    c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP, stack=None
+):
+    """Tear-down CDK CloudFormation stack(s)."""
 
     responder = Responder(
         pattern="Are you sure you want to delete.*", response="y\n"
     )
 
-    c.run(
-        f"cdk destroy --profile={profile}",
-        pty=True,
-        watchers=[responder] if force else [],
-        env={"AWS_DEFAULT_REGION": region},
-    )
+    if stack:
+        c.run(
+            f"cdk destroy --profile={profile} {stack}",
+            pty=True,
+            watchers=[responder] if force else [],
+            env={"AWS_DEFAULT_REGION": region},
+        )
+    else:
+        c.run(
+            f"cdk destroy --profile={profile} '*'",
+            pty=True,
+            watchers=[responder] if force else [],
+            env={"AWS_DEFAULT_REGION": region},
+        )
 
     klaxon(title=app, subtitle="destroyed CDK stack")
 
@@ -110,11 +120,36 @@ def diff(c, profile=AWS_PROFILE, region=AWS_REGION):
 
 
 @task
-def synth(c, profile=AWS_PROFILE, region=AWS_REGION):
-    """Render cdk cloudformation template."""
+def _list(c, profile=AWS_PROFILE):
+    """List of CDK stacks that are deployable"""
 
+    c.run(f"cdk list --profile {profile}")
+
+
+@task(optional=["stack"])
+def synth(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
+    """Render CDK cloudformation template."""
+
+    if stack:
+        c.run(
+            f"cdk synth --profile={profile} {stack}",
+            pty=True,
+            env={"AWS_DEFAULT_REGION": region},
+        )
+    else:
+        c.run(
+            f"cdk synth --profile={profile} -e",
+            pty=True,
+            env={"AWS_DEFAULT_REGION": region},
+        )
+
+
+@task
+def s3_bucket_sync(c, source_bucket=None, sink_bucket=None):
+    """Sync an S3 bucket with another S3 bucket"""
+    if not source_bucket or sink_bucket:
+        source_bucket = "s3://deutsche-boerse-eurex-pds/2017-05-27/"
+        sink_bucket = "s3://nutrien-blake-enyart-dev/dbg_pds_RAW/"
     c.run(
-        f"cdk synth --profile={profile}",
-        pty=True,
-        env={"AWS_DEFAULT_REGION": region},
+        f"aws --profile {AWS_PROFILE} s3 sync {source_bucket}* {sink_bucket}*"
     )
