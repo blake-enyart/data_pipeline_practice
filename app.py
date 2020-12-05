@@ -7,6 +7,7 @@ from data_pipeline_practice.data_pipeline_practice_stack import (
     DataPipelinePracticeStack,
 )
 
+
 ORG_NAME = os.environ["ORG_NAME"]
 PROJECT_NAME = os.environ["PROJECT_NAME"]
 STAGE = os.environ["STAGE"]
