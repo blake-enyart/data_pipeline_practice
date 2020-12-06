@@ -632,6 +632,23 @@ jsii = ">=1.14.1,<2.0.0"
 publication = ">=0.0.3"
 
 [[package]]
+name = "aws-cdk.aws-glue"
+version = "1.75.0"
+description = "The CDK Construct Library for AWS::Glue"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+"aws-cdk.aws-iam" = "1.75.0"
+"aws-cdk.aws-kms" = "1.75.0"
+"aws-cdk.aws-s3" = "1.75.0"
+"aws-cdk.core" = "1.75.0"
+constructs = ">=3.2.0,<4.0.0"
+jsii = ">=1.14.1,<2.0.0"
+publication = ">=0.0.3"
+
+[[package]]
 name = "aws-cdk.aws-iam"
 version = "1.75.0"
 description = "CDK routines for easily assigning correct and minimal IAM permissions"
@@ -1424,7 +1441,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "a46a562da7fe6dd9e7899112894c17765a4c59b30d4042ab28a8dbdadb50ce05"
+content-hash = "4734fbad5432fefb90f32d3677bc6c4d9ccef59275a15f0f1ca09730f049c252"
 
 [metadata.files]
 attrs = [
@@ -1554,6 +1571,10 @@ attrs = [
 "aws-cdk.aws-events-targets" = [
     {file = "aws-cdk.aws-events-targets-1.75.0.tar.gz", hash = "sha256:e378d19f60726e59302aeed8ed54acdc54491e82ba5fbfc0aad0e123939358e9"},
     {file = "aws_cdk.aws_events_targets-1.75.0-py3-none-any.whl", hash = "sha256:9afe42c349a45a882cd55686bea65e074ba9550f1772c9cf0eb85647c8afb958"},
+]
+"aws-cdk.aws-glue" = [
+    {file = "aws-cdk.aws-glue-1.75.0.tar.gz", hash = "sha256:7a62dc62583aa2fe71301323a2bd3d4e77b97e1272ac0629423255f4ff78a1a7"},
+    {file = "aws_cdk.aws_glue-1.75.0-py3-none-any.whl", hash = "sha256:0ad21ffbd758306db04954019ccab7533f6155ebc2effab4b6ae619be21fa96b"},
 ]
 "aws-cdk.aws-iam" = [
     {file = "aws-cdk.aws-iam-1.75.0.tar.gz", hash = "sha256:826b3ea295a747d58c94135d0554e0c4696aea550743e4abb7875d3970ff18ae"},
