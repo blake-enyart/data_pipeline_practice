@@ -5,6 +5,7 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_kinesisfirehose as kf,
     aws_iam as iam,
+    aws_glue as glue,
 )
 
 from aws_solutions_constructs import (
@@ -12,6 +13,9 @@ from aws_solutions_constructs import (
 )
 
 from data_pipeline_practice.ecs_fargate_cluster import EcsFargateCluster
+
+GLUE_DB_NAME = "blake_enyart_test_database"
+GLUE_TABLE_NAME = "blake_enyart_twitter_data_2020"
 
 
 class DataPipelinePracticeStack(core.Stack):
@@ -31,10 +35,40 @@ class DataPipelinePracticeStack(core.Stack):
             self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
         )
 
+        glue_db = glue.Database.from_database_arn(
+            self,
+            "GlueDatabase",
+            database_arn=f"arn:aws:glue:{self.region}:{self.account}:database/{GLUE_DB_NAME}",
+        )
+        glue_table = glue.Table.from_table_arn(
+            self,
+            "GlueTable",
+            table_arn=f"arn:aws:glue:{self.region}:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
+        )
+
         kinesis_fh_role = iam.Role(
             self,
             "KinesisFirehoseS3Role",
             assumed_by=iam.ServicePrincipal("firehose.amazonaws.com"),
+            inline_policies={
+                "GlueAccess": iam.PolicyDocument(
+                    statements=[
+                        iam.PolicyStatement(
+                            actions=[
+                                "glue:GetTable",
+                                "glue:GetTableVersion",
+                                "glue:GetTableVersions",
+                            ],
+                            resources=[
+                                glue_db.catalog_arn,
+                                glue_db.database_arn,
+                                glue_table.table_arn,
+                            ],
+                            effect=iam.Effect.ALLOW,
+                        )
+                    ]
+                )
+            },
         )
 
         kinesis_fh_role.add_to_policy(
@@ -76,11 +110,16 @@ class DataPipelinePracticeStack(core.Stack):
                         serializer=kf.CfnDeliveryStream.SerializerProperty(
                             parquet_ser_de=kf.CfnDeliveryStream.ParquetSerDeProperty(
                                 compression="GZIP",
-                                block_size_bytes=128_000_000,
                             )
                         )
                     ),
-                    schema_configuration=kf.CfnDeliveryStream.SchemaConfigurationProperty(),
+                    schema_configuration=kf.CfnDeliveryStream.SchemaConfigurationProperty(
+                        database_name=glue_db.database_name,
+                        role_arn=kinesis_fh_role.role_arn,
+                        table_name=glue_table.table_name,
+                        region=self.region,
+                        version_id="LATEST",
+                    ),
                 ),
             )
         )
