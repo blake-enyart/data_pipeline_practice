@@ -6,10 +6,7 @@ import time
 
 # To set your environment variables in your terminal run the following line:
 # export 'BEARER_TOKEN'='<your_bearer_token>'
-KINESIS_STREAM_NAME = os.environ.get(
-    "KINESIS_STREAM_NAME",
-    "data-pipeline-practice-TwitterStreamStream0A60CA48-NNQOKLSTGFFE",
-)
+KINESIS_STREAM_NAME = os.environ.get("KINESIS_STREAM_NAME")
 LOCAL_DEV = os.environ.get("LOCAL_DEV")
 
 
