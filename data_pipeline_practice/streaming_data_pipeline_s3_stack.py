@@ -18,7 +18,7 @@ GLUE_DB_NAME = "blake_enyart_test_database"
 GLUE_TABLE_NAME = "blake_enyart_twitter_data_2020"
 
 
-class DataPipelinePracticeStack(core.Stack):
+class StreamingDataPipelineS3Stack(core.Stack):
     def __init__(
         self, scope: core.Construct, construct_id: str, **kwargs
     ) -> None:

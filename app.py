@@ -3,8 +3,8 @@
 from aws_cdk import core
 import os
 
-from data_pipeline_practice.data_pipeline_practice_stack import (
-    DataPipelinePracticeStack,
+from data_pipeline_practice.streaming_data_pipeline_s3_stack import (
+    StreamingDataPipelineS3Stack,
 )
 
 
@@ -13,11 +13,11 @@ PROJECT_NAME = os.environ["PROJECT_NAME"]
 STAGE = os.environ["STAGE"]
 
 app = core.App()
-data_pipeline_practice_stack = DataPipelinePracticeStack(
-    app, "data-pipeline-practice"
+streaming_data_pipeline_s3_stack = StreamingDataPipelineS3Stack(
+    app, "streaming-data-pipeline-s3"
 )
 
-core.Tags.of(data_pipeline_practice_stack).add(
+core.Tags.of(streaming_data_pipeline_s3_stack).add(
     "Project", f"{ORG_NAME}-{PROJECT_NAME}-{STAGE}"
 )
 
