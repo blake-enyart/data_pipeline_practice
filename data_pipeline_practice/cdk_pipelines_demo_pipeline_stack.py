@@ -14,9 +14,9 @@ class CdkPipelinesDemoStack(core.Stack):
     def __init__(self, scope: core.Construct, construct_id: str, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
 
-        source_artifact = cp.Artifact()
-        cloud_assembly_artifact = cp.Artifact()
-        integ_tests_artifact = code_pipeline.Artifact("IntegTests")
+        source_artifact = cp.Artifact("SourceArtifact")
+        cloud_assembly_artifact = cp.Artifact("CloudAssemblyArtifact")
+        integ_tests_artifact = cp.Artifact("IntegTests")
 
         cicd_pipeline = pipelines.CdkPipeline(
             self,
@@ -44,7 +44,9 @@ class CdkPipelinesDemoStack(core.Stack):
                 ],
                 synth_command="cdk synth",
                 additional_artifacts=[
-                    {"directory": "test", "artifact": integ_tests_artifact}
+                    pipelines.AdditionalArtifact(
+                        artifact=integ_tests_artifact, directory="test",
+                    )
                 ],
             ),
             self_mutating=False,
