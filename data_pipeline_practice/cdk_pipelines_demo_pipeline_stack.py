@@ -43,7 +43,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 self,
                 "MyApplication",
                 env=core.Environment(
-                    account="fill out later",
+                    account="848684029682",
                     region=os.getenv("AWS_DEFAULT_REGION"),
                 ),
             ),
