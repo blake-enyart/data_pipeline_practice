@@ -16,6 +16,7 @@ class CdkPipelinesDemoStack(core.Stack):
 
         source_artifact = cp.Artifact()
         cloud_assembly_artifact = cp.Artifact()
+        integ_tests_artifact = code_pipeline.Artifact("IntegTests")
 
         cicd_pipeline = pipelines.CdkPipeline(
             self,
@@ -42,7 +43,11 @@ class CdkPipelinesDemoStack(core.Stack):
                     "poetry install --no-dev",
                 ],
                 synth_command="cdk synth",
+                additional_artifacts=[
+                    {"directory": "test", "artifact": integ_tests_artifact}
+                ],
             ),
+            self_mutating=False,
         )
 
         dev_stage = cicd_pipeline.add_application_stage(
@@ -58,8 +63,11 @@ class CdkPipelinesDemoStack(core.Stack):
         dev_stage.add_actions(
             pipelines.ShellScriptAction(
                 action_name="TestService",
-                commands=["pytest",],
-                additional_artifacts=[cloud_assembly_artifact],
+                commands=["pip install pytest", "pytest",],
+                additional_artifacts=[
+                    cloud_assembly_artifact,
+                    integ_tests_artifact,
+                ],
                 run_order=3,
             ),
         )
