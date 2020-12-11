@@ -1,0 +1,50 @@
+from aws_cdk import (
+    aws_codepipeline as cpp,
+    aws_codepipeline_actions as cpp_actions,
+    core,
+    pipelines,
+)
+
+import os
+
+from data_pipeline_practice.cdk_pipelines_stage import MyApplication
+
+
+class CdkPipelinesDemoStack(core.Stack):
+    def __init__(self, id: str, **kwargs):
+        super().__init__(scope, id, **kwargs)
+
+        source_artifact = cpp.Artifact()
+        cloud_assembly_artifact = cpp.Artifact()
+
+        cicd_pipeline = pipelines.CdkPipeline(
+            self,
+            "DemoPipeline",
+            cloud_assembly_artifact=cloud_assembly_artifact,
+            pipeline_name="DemoPipeline",
+            source_action=cpp_actions.GitHubSourceAction(
+                action_name="GitHub",
+                output=source_artifact,
+                oauth_token=core.SecretValue.secrets_manager("github-token"),
+                owner="blake-enyart",
+                repo="data_pipeline_practice",
+                branch="bte-pipelines-test",
+            ),
+            synth_action=pipelines.SimpleSynthAction(
+                source_artifact=source_artifact,
+                cloud_assembly_artifact=cloud_assembly_artifact,
+                install_command="npm install -g aws-cdk",
+                synth_command="cdk synth",
+            ),
+        )
+
+        cicd_pipeline.add_application_stage(
+            app_stage=MyApplication(
+                self,
+                "MyApplication",
+                env=core.Environment(
+                    account="fill out later",
+                    region=os.getenv("AWS_DEFAULT_REGION"),
+                ),
+            ),
+        )
