@@ -25,7 +25,9 @@ class CdkPipelinesDemoStack(core.Stack):
             source_action=cpp_actions.GitHubSourceAction(
                 action_name="GitHub",
                 output=source_artifact,
-                oauth_token=core.SecretValue.secrets_manager("github-token"),
+                oauth_token=core.SecretValue.secrets_manager(
+                    "github-token-blake-enyart"
+                ),
                 owner="blake-enyart",
                 repo="data_pipeline_practice",
                 branch="bte-pipeines-test",
