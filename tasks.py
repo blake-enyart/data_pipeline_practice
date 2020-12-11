@@ -15,6 +15,7 @@ AWS_REGION = "us-east-2"
 
 # Must separate these by spaces and indicate directories with trailing /
 BLACK_FILEPATH_STR = f"{APP}/ lambda/"
+USERNAME = os.getenv("USERNAME")
 
 
 @task
@@ -69,18 +70,18 @@ def deploy(
             pty=True,
             env={"AWS_DEFAULT_REGION": region},
         )
+        klaxon(title=app, subtitle="deployed CDK stack")
     else:
-        c.run(
-            f"cdk deploy --profile={profile} '*'"
-            + (" --require-approval never" if force else ""),
-            pty=True,
-            env={"AWS_DEFAULT_REGION": region},
-        )
+        print("Please provide a stack to deploy")
+        # c.run(
+        #     f"cdk deploy --profile={profile} '*'"
+        #     + (" --require-approval never" if force else ""),
+        #     pty=True,
+        #     env={"AWS_DEFAULT_REGION": region},
+        # )
 
-    klaxon(title=app, subtitle="deployed CDK stack")
 
-
-@task(optional=["stack"])
+@task
 def destroy(
     c, profile=AWS_PROFILE, region=AWS_REGION, force=False, app=APP, stack=None
 ):
@@ -97,15 +98,15 @@ def destroy(
             watchers=[responder] if force else [],
             env={"AWS_DEFAULT_REGION": region},
         )
+        klaxon(title=app, subtitle="destroyed CDK stack")
     else:
-        c.run(
-            f"cdk destroy --profile={profile} '*'",
-            pty=True,
-            watchers=[responder] if force else [],
-            env={"AWS_DEFAULT_REGION": region},
-        )
-
-    klaxon(title=app, subtitle="destroyed CDK stack")
+        print("Please provide a stack to deploy")
+        # c.run(
+        #     f"cdk destroy --profile={profile} '*'",
+        #     pty=True,
+        #     watchers=[responder] if force else [],
+        #     env={"AWS_DEFAULT_REGION": region},
+        # )
 
 
 @task
@@ -128,7 +129,7 @@ def _list(c, profile=AWS_PROFILE):
 
 @task(optional=["stack"])
 def synth(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
-    """Render CDK cloudformation template."""
+    """Render CDK CloudFormation template."""
 
     if stack:
         c.run(
@@ -137,11 +138,12 @@ def synth(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
             env={"AWS_DEFAULT_REGION": region},
         )
     else:
-        c.run(
-            f"cdk synth --profile={profile} -e",
-            pty=True,
-            env={"AWS_DEFAULT_REGION": region},
-        )
+        print("Please provide a stack to deploy")
+        # c.run(
+        #     f"cdk synth --profile={profile} -e",
+        #     pty=True,
+        #     env={"AWS_DEFAULT_REGION": region},
+        # )
 
 
 @task
