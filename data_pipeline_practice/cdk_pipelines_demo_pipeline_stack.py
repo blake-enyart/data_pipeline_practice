@@ -53,14 +53,13 @@ class CdkPipelinesDemoStack(core.Stack):
                     account="848684029682", region="us-east-2",
                 ),
             ),
-            manual_approvals=True,
         )
 
         dev_stage.add_actions(
             pipelines.ShellScriptAction(
                 action_name="TestService",
                 commands=["pytest",],
-                additional_artifacts=[source_artifact],
+                additional_artifacts=[cloud_assembly_artifact],
             )
         )
 
@@ -69,7 +68,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 self,
                 "Prod",
                 env=core.Environment(
-                    account="848684029682", region="us-east-2",
+                    account="848684029682", region="us-east-1",
                 ),
             ),
         )
