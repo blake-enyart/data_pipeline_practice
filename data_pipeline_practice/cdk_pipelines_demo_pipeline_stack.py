@@ -64,7 +64,9 @@ class CdkPipelinesDemoStack(core.Stack):
             ),
         )
 
-        dev_stage.add_manual_approval_action("ManualApproval", run_order=4)
+        dev_stage.add_manual_approval_action(
+            action_name="ManualApproval", run_order=4
+        )
 
         cicd_pipeline.add_application_stage(
             app_stage=MyApplication(
