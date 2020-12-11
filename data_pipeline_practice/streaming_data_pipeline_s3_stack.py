@@ -42,12 +42,12 @@ class StreamingDataPipelineS3Stack(core.Stack):
         glue_db = glue.Database.from_database_arn(
             self,
             "GlueDatabase",
-            database_arn=f"arn:aws:glue:{self.region}:{self.account}:database/{GLUE_DB_NAME}",
+            database_arn=f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}",
         )
         glue_table = glue.Table.from_table_arn(
             self,
             "GlueTable",
-            table_arn=f"arn:aws:glue:{self.region}:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
+            table_arn=f"arn:aws:glue:us-east-2:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
         )
 
         kinesis_fh_role = iam.Role(
