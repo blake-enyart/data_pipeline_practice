@@ -16,7 +16,6 @@ class CdkPipelinesDemoStack(core.Stack):
 
         source_artifact = cp.Artifact("SourceArtifact")
         cloud_assembly_artifact = cp.Artifact("CloudAssemblyArtifact")
-        integ_tests_artifact = cp.Artifact("IntegTests")
 
         cicd_pipeline = pipelines.CdkPipeline(
             self,
@@ -32,22 +31,18 @@ class CdkPipelinesDemoStack(core.Stack):
                 owner="blake-enyart",
                 repo="data_pipeline_practice",
                 branch="main",
+                trigger=cp_actions.GitHubTrigger.POLL,
             ),
             synth_action=pipelines.SimpleSynthAction(
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
-                install_command="npm install -g aws-cdk@1.75.0",
-                build_commands=[
+                install_commands=[
+                    "npm install -g aws-cdk@1.75.0",
                     "pip install poetry",
                     "poetry config virtualenvs.create false",
                     "poetry install --no-dev",
                 ],
                 synth_command="cdk synth",
-                additional_artifacts=[
-                    pipelines.AdditionalArtifact(
-                        artifact=integ_tests_artifact, directory="test",
-                    )
-                ],
             ),
             self_mutating=False,
         )
@@ -64,12 +59,14 @@ class CdkPipelinesDemoStack(core.Stack):
 
         dev_stage.add_actions(
             pipelines.ShellScriptAction(
-                action_name="TestService",
-                commands=["pip install pytest", "pytest",],
-                additional_artifacts=[
-                    cloud_assembly_artifact,
-                    integ_tests_artifact,
+                action_name="IntegrationTestService",
+                commands=[
+                    "pip install poetry pytest",
+                    "poetry config virtualenvs.create false",
+                    "poetry install --no-dev",
+                    "pytest tests",
                 ],
+                additional_artifacts=[source_artifact,],
                 run_order=3,
             ),
         )
