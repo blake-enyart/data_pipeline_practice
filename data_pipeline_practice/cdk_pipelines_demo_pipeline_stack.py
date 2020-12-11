@@ -36,6 +36,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
                 install_command="npm install -g aws-cdk",
+                build_command="poetry install",
                 synth_command="cdk synth",
             ),
         )
