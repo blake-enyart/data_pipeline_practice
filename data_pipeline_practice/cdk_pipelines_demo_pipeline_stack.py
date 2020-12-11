@@ -55,11 +55,8 @@ class CdkPipelinesDemoStack(core.Stack):
             ),
         )
 
-        # dev_stage.add_actions(
-        #     pipelines.ShellScriptAction(
-        #         action_name="TestService",
-        #         commands= [
-        #             'curl -Ssf $ENDPOINT_URL',
-        #         ]
-        #     )
-        # )
+        dev_stage.add_actions(
+            pipelines.ShellScriptAction(
+                action_name="TestService", commands=["pytest",]
+            )
+        )
