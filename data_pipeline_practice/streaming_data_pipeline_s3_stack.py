@@ -1,3 +1,4 @@
+import os
 from aws_cdk import (
     core,
     aws_ec2 as ec2,
@@ -31,9 +32,12 @@ class StreamingDataPipelineS3Stack(core.Stack):
             self, "KinesisDataStreamName", value=stream.stream_name,
         )
 
-        bucket = s3.Bucket.from_bucket_name(
-            self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
-        )
+        if self.region == "us-east-2":
+            bucket = s3.Bucket.from_bucket_name(
+                self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
+            )
+        else:
+            bucket = s3.Bucket(self, "S3Bucket",)
 
         glue_db = glue.Database.from_database_arn(
             self,
