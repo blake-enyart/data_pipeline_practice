@@ -60,15 +60,11 @@ class CdkPipelinesDemoStack(core.Stack):
                 action_name="TestService",
                 commands=["pytest",],
                 additional_artifacts=[cloud_assembly_artifact],
-            )
+                run_order=3,
+            ),
         )
 
-        dev_stage.add_actions(
-            cp_actions.ManualApprovalAction(
-                action_name="ManualApproval",
-                run_order=dev_stage.next_sequential_run_order(),
-            )
-        )
+        dev_stage.add_manual_approval_action("ManualApproval", run_order=4)
 
         cicd_pipeline.add_application_stage(
             app_stage=MyApplication(
