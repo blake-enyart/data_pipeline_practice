@@ -35,8 +35,12 @@ class CdkPipelinesDemoStack(core.Stack):
             synth_action=pipelines.SimpleSynthAction(
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
-                install_command="npm install -g aws-cdk",
-                build_command="poetry install",
+                install_command="npm install -g aws-cdk@1.75.0",
+                build_commands=[
+                    "pip install poetry",
+                    "poetry config virtualenvs.create false",
+                    "poetry install --no-dev",
+                ],
                 synth_command="cdk synth",
             ),
         )

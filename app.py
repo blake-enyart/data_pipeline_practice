@@ -11,9 +11,9 @@ from data_pipeline_practice.cdk_pipelines_demo_pipeline_stack import (
 )
 
 
-ORG_NAME = os.environ["ORG_NAME"]
-PROJECT_NAME = os.environ["PROJECT_NAME"]
-STAGE = os.environ["STAGE"]
+ORG_NAME = os.getenv("ORG_NAME")
+PROJECT_NAME = os.getenv("PROJECT_NAME")
+STAGE = os.getenv("STAGE")
 
 app = core.App()
 # streaming_data_pipeline_s3_stack = StreamingDataPipelineS3Stack(
