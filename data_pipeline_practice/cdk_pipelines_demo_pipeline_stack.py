@@ -48,15 +48,26 @@ class CdkPipelinesDemoStack(core.Stack):
         dev_stage = cicd_pipeline.add_application_stage(
             app_stage=MyApplication(
                 self,
-                "MyApplication",
+                "PreProd",
                 env=core.Environment(
                     account="848684029682", region="us-east-2",
                 ),
             ),
+            manual_approvals=True,
         )
 
         dev_stage.add_actions(
             pipelines.ShellScriptAction(
                 action_name="TestService", commands=["pytest",]
             )
+        )
+
+        cicd_pipeline.add_application_stage(
+            app_stage=MyApplication(
+                self,
+                "Prod",
+                env=core.Environment(
+                    account="848684029682", region="us-east-2",
+                ),
+            ),
         )
