@@ -30,7 +30,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 ),
                 owner="blake-enyart",
                 repo="data_pipeline_practice",
-                branch="bte-pipeines-test",
+                branch="main",
             ),
             synth_action=pipelines.SimpleSynthAction(
                 source_artifact=source_artifact,
@@ -45,7 +45,7 @@ class CdkPipelinesDemoStack(core.Stack):
             ),
         )
 
-        cicd_pipeline.add_application_stage(
+        dev_stage = cicd_pipeline.add_application_stage(
             app_stage=MyApplication(
                 self,
                 "MyApplication",
@@ -54,3 +54,12 @@ class CdkPipelinesDemoStack(core.Stack):
                 ),
             ),
         )
+
+        # dev_stage.add_actions(
+        #     pipelines.ShellScriptAction(
+        #         action_name="TestService",
+        #         commands= [
+        #             'curl -Ssf $ENDPOINT_URL',
+        #         ]
+        #     )
+        # )
