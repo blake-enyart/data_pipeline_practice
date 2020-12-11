@@ -58,7 +58,9 @@ class CdkPipelinesDemoStack(core.Stack):
 
         dev_stage.add_actions(
             pipelines.ShellScriptAction(
-                action_name="TestService", commands=["pytest",]
+                action_name="TestService",
+                commands=["pytest",],
+                additional_artifacts=[source_artifact],
             )
         )
 
