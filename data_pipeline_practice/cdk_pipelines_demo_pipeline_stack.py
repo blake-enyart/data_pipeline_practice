@@ -1,6 +1,6 @@
 from aws_cdk import (
-    aws_codepipeline as cpp,
-    aws_codepipeline_actions as cpp_actions,
+    aws_codepipeline as cp,
+    aws_codepipeline_actions as cp_actions,
     core,
     pipelines,
 )
@@ -14,15 +14,15 @@ class CdkPipelinesDemoStack(core.Stack):
     def __init__(self, scope: core.Construct, construct_id: str, **kwargs):
         super().__init__(scope, construct_id, **kwargs)
 
-        source_artifact = cpp.Artifact()
-        cloud_assembly_artifact = cpp.Artifact()
+        source_artifact = cp.Artifact()
+        cloud_assembly_artifact = cp.Artifact()
 
         cicd_pipeline = pipelines.CdkPipeline(
             self,
             "DemoPipeline",
             cloud_assembly_artifact=cloud_assembly_artifact,
             pipeline_name="DemoPipeline",
-            source_action=cpp_actions.GitHubSourceAction(
+            source_action=cp_actions.GitHubSourceAction(
                 action_name="GitHub",
                 output=source_artifact,
                 oauth_token=core.SecretValue.secrets_manager(
@@ -60,6 +60,13 @@ class CdkPipelinesDemoStack(core.Stack):
                 action_name="TestService",
                 commands=["pytest",],
                 additional_artifacts=[cloud_assembly_artifact],
+            )
+        )
+
+        dev_stage.add_actions(
+            cp_actions.ManualApprovalAction(
+                action_name="ManualApproval",
+                run_order=dev_stage.next_sequential_run_order(),
             )
         )
 
