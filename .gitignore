@@ -16,3 +16,6 @@ cdk.out
 # IDE files
 .venv/
 .vscode/
+
+# git-secrets files
+.DS_Store
