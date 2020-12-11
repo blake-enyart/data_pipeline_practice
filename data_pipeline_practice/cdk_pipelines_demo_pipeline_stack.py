@@ -28,7 +28,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 oauth_token=core.SecretValue.secrets_manager("github-token"),
                 owner="blake-enyart",
                 repo="data_pipeline_practice",
-                branch="bte-pipelines-test",
+                branch="bte-pipeines-test",
             ),
             synth_action=pipelines.SimpleSynthAction(
                 source_artifact=source_artifact,
