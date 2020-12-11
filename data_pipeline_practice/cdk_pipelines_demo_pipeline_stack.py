@@ -11,8 +11,8 @@ from data_pipeline_practice.cdk_pipelines_stage import MyApplication
 
 
 class CdkPipelinesDemoStack(core.Stack):
-    def __init__(self, id: str, **kwargs):
-        super().__init__(scope, id, **kwargs)
+    def __init__(self, scope: core.Construct, construct_id: str, **kwargs):
+        super().__init__(scope, construct_id, **kwargs)
 
         source_artifact = cpp.Artifact()
         cloud_assembly_artifact = cpp.Artifact()
