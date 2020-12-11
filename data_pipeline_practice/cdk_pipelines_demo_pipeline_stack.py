@@ -39,12 +39,5 @@ class CdkPipelinesDemoStack(core.Stack):
         )
 
         cicd_pipeline.add_application_stage(
-            app_stage=MyApplication(
-                self,
-                "MyApplication",
-                env=core.Environment(
-                    account="848684029682",
-                    region=os.getenv("AWS_DEFAULT_REGION"),
-                ),
-            ),
+            app_stage=MyApplication(self, "MyApplication",),
         )

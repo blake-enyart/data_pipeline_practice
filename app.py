@@ -21,7 +21,11 @@ app = core.App()
 # )
 
 cdk_pipelines_demo_pipeline_stack = CdkPipelinesDemoStack(
-    app, "cdk-pipelines-demo-stack"
+    app,
+    "cdk-pipelines-demo-stack",
+    env=core.Environment(
+        account="848684029682", region=os.getenv("AWS_DEFAULT_REGION"),
+    ),
 )
 
 
