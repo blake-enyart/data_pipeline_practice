@@ -11,10 +11,10 @@ from klaxon import klaxon
 
 APP = "data_pipeline_practice"
 AWS_PROFILE = "nutrien"
-AWS_REGION = "us-east-2"
+AWS_REGION = "us-east-1"
 
 # Must separate these by spaces and indicate directories with trailing /
-BLACK_FILEPATH_STR = f"{APP}/ lambda/"
+BLACK_FILEPATH_STR = f"{APP}/ lambda/ tests/"
 USERNAME = os.getenv("USERNAME")
 
 

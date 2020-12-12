@@ -44,10 +44,11 @@ class StreamingDataPipelineS3Stack(core.Stack):
             "GlueDatabase",
             database_arn=f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}",
         )
+
         glue_table = glue.Table.from_table_arn(
             self,
             "GlueTable",
-            table_arn=f"arn:aws:glue:us-east-2:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
+            table_arn=f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
         )
 
         kinesis_fh_role = iam.Role(
@@ -120,7 +121,7 @@ class StreamingDataPipelineS3Stack(core.Stack):
                     schema_configuration=kf.CfnDeliveryStream.SchemaConfigurationProperty(
                         database_name=glue_db.database_name,
                         role_arn=kinesis_fh_role.role_arn,
-                        table_name=glue_table.table_name,
+                        table_name="blake_enyart_twitter_data_2020",
                         region=self.region,
                         version_id="LATEST",
                     ),
