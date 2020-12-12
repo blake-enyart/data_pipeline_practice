@@ -15,7 +15,6 @@ AWS_REGION = "us-east-1"
 
 # Must separate these by spaces and indicate directories with trailing /
 BLACK_FILEPATH_STR = f"{APP}/ lambda/ tests/"
-USERNAME = os.getenv("USERNAME")
 
 
 @task
@@ -73,12 +72,6 @@ def deploy(
         klaxon(title=app, subtitle="deployed CDK stack")
     else:
         print("Please provide a stack to deploy")
-        # c.run(
-        #     f"cdk deploy --profile={profile} '*'"
-        #     + (" --require-approval never" if force else ""),
-        #     pty=True,
-        #     env={"AWS_DEFAULT_REGION": region},
-        # )
 
 
 @task
@@ -101,12 +94,6 @@ def destroy(
         klaxon(title=app, subtitle="destroyed CDK stack")
     else:
         print("Please provide a stack to deploy")
-        # c.run(
-        #     f"cdk destroy --profile={profile} '*'",
-        #     pty=True,
-        #     watchers=[responder] if force else [],
-        #     env={"AWS_DEFAULT_REGION": region},
-        # )
 
 
 @task
@@ -139,19 +126,14 @@ def synth(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
         )
     else:
         print("Please provide a stack to deploy")
-        # c.run(
-        #     f"cdk synth --profile={profile} -e",
-        #     pty=True,
-        #     env={"AWS_DEFAULT_REGION": region},
-        # )
 
 
 @task
-def s3_bucket_sync(c, source_bucket=None, sink_bucket=None):
+def s3_bucket_sync(
+    c, profile=AWS_PROFILE, source_bucket=None, sink_bucket=None
+):
     """Sync an S3 bucket with another S3 bucket"""
     if not source_bucket or sink_bucket:
         source_bucket = "s3://deutsche-boerse-eurex-pds/2017-05-27/"
         sink_bucket = "s3://nutrien-blake-enyart-dev/dbg_pds_RAW/"
-    c.run(
-        f"aws --profile {AWS_PROFILE} s3 sync {source_bucket}* {sink_bucket}*"
-    )
+    c.run(f"aws --profile {profile} s3 sync {source_bucket}* {sink_bucket}*")

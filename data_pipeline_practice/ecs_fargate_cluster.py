@@ -37,10 +37,10 @@ class EcsFargateCluster(core.Construct):
 
         ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
 
-        twitter_credentials = secretsmanager.Secret.from_secret_name_v2(
+        twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
             "TwitterCredentials",
-            "BlakeEnyart/dev/dataPipelinePractice/TwitterAPI",
+            secret_complete_arn="arn:aws:secretsmanager:us-east-2:848684029682:secret:BlakeEnyart/dev/dataPipelinePractice/TwitterAPI-JqFPsv",
         )
 
         ecs_task_definition = ecs.FargateTaskDefinition(

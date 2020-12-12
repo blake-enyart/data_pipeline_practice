@@ -32,23 +32,22 @@ class StreamingDataPipelineS3Stack(core.Stack):
             self, "KinesisDataStreamName", value=stream.stream_name,
         )
 
-        if self.region == "us-east-2":
-            bucket = s3.Bucket.from_bucket_name(
-                self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
-            )
-        else:
-            bucket = s3.Bucket(self, "S3Bucket",)
+        bucket = s3.Bucket.from_bucket_name(
+            self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
+        )
+
+        glue_db_arn = (
+            f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}"
+        )
+        glue_table_arn = f"arn:aws:glue:us-east-2:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}"
+        glue_catalog_arn = f"arn:aws:glue:us-east-2:{self.account}:catalog"
 
         glue_db = glue.Database.from_database_arn(
-            self,
-            "GlueDatabase",
-            database_arn=f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}",
+            self, "GlueDatabase", database_arn=glue_db_arn,
         )
 
         glue_table = glue.Table.from_table_arn(
-            self,
-            "GlueTable",
-            table_arn=f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}",
+            self, "GlueTable", table_arn=glue_table_arn,
         )
 
         kinesis_fh_role = iam.Role(
@@ -65,9 +64,9 @@ class StreamingDataPipelineS3Stack(core.Stack):
                                 "glue:GetTableVersions",
                             ],
                             resources=[
-                                glue_db.catalog_arn,
-                                glue_db.database_arn,
-                                glue_table.table_arn,
+                                glue_db_arn,
+                                glue_table_arn,
+                                glue_catalog_arn,
                             ],
                             effect=iam.Effect.ALLOW,
                         )
@@ -100,6 +99,11 @@ class StreamingDataPipelineS3Stack(core.Stack):
                 buffering_hints=kf.CfnDeliveryStream.BufferingHintsProperty(
                     size_in_m_bs=64,
                 ),
+                encryption_configuration=kf.CfnDeliveryStream.EncryptionConfigurationProperty(
+                    kms_encryption_config=kf.CfnDeliveryStream.KMSEncryptionConfigProperty(
+                        awskms_key_arn="arn:aws:kms:us-east-2:848684029682:alias/aws/s3"
+                    )
+                ),
                 data_format_conversion_configuration=kf.CfnDeliveryStream.DataFormatConversionConfigurationProperty(
                     enabled=True,
                     input_format_configuration=kf.CfnDeliveryStream.InputFormatConfigurationProperty(
@@ -121,8 +125,8 @@ class StreamingDataPipelineS3Stack(core.Stack):
                     schema_configuration=kf.CfnDeliveryStream.SchemaConfigurationProperty(
                         database_name=glue_db.database_name,
                         role_arn=kinesis_fh_role.role_arn,
-                        table_name="blake_enyart_twitter_data_2020",
-                        region=self.region,
+                        table_name=glue_table.table_name,
+                        region="us-east-2",
                         version_id="LATEST",
                     ),
                 ),
