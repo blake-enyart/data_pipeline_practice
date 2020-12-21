@@ -19,3 +19,4 @@ cdk.out
 
 # git-secrets files
 .DS_Store
+node_modules

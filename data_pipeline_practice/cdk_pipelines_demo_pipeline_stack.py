@@ -37,7 +37,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
                 install_commands=[
-                    "npm install -g aws-cdk@1.75.0",
+                    "npm install -g aws-cdk@1.76.0",
                     "pip install poetry",
                     "poetry config virtualenvs.create false",
                     "poetry install --no-dev",
@@ -75,7 +75,7 @@ class CdkPipelinesDemoStack(core.Stack):
             action_name="ManualApproval", run_order=4
         )
 
-        cicd_pipeline.add_application_stage(
+        prod_stage = cicd_pipeline.add_application_stage(
             app_stage=MyApplication(
                 self,
                 "Prod",
@@ -84,3 +84,5 @@ class CdkPipelinesDemoStack(core.Stack):
                 ),
             ),
         )
+
+        prod_stage.deploys_stack(artifact_id=cloud_assembly_artifact.url)
