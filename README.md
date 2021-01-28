@@ -12,6 +12,8 @@ directory.  To create the virtualenv it assumes that there is a `python3`
 package. If for any reason the automatic creation of the virtualenv fails,
 you can create the virtualenv manually.
 
+Prior to configuring your virtualenv, ensure you have the [invoke](http://www.pyinvoke.org/) and [poetry](https://python-poetry.org/) libraries installed globally for your python version.
+
 To manually create a virtualenv on MacOS and Linux:
 
 ```
@@ -34,17 +36,25 @@ If you are a Windows platform, you would activate the virtualenv like this:
 Once the virtualenv is activated, you can install the required dependencies.
 
 ```
-$ pip install -r requirements.txt
+$ poetry install
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+Configure the `tasks.py` file such that the AWS_PROFILE is set to your AWS CLI profile which you want to work out of.
+
+At this point you can now determine the names of the available stacks.
 
 ```
-$ cdk synth
+$ inv _list 
 ```
+From this list, synthesize the CloudFormation template for this code as follows.
+
+```
+$ inv synth -s streaming-data-pipeline-s3-<username>
+```
+
 
 To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `pip install -r requirements.txt`
+them to your `setup.py` file and rerun the `poetry install`
 command.
 
 ## Useful commands

@@ -10,8 +10,7 @@ from data_pipeline_practice.cdk_pipelines_demo_pipeline_stack import (
     CdkPipelinesDemoStack,
 )
 
-
-USERNAME = os.getenv("USERNAME")
+USERNAME = getpass.getuser()
 # ORG_NAME = os.getenv("ORG_NAME")
 # PROJECT_NAME = os.getenv("PROJECT_NAME")
 
@@ -23,7 +22,7 @@ streaming_data_pipeline_s3_stack = StreamingDataPipelineS3Stack(
 cdk_pipelines_demo_pipeline_stack = CdkPipelinesDemoStack(
     app,
     "cdk-deployment-pipeline",
-    env=core.Environment(account="848684029682", region="us-east-2",),
+    env=core.Environment(account=os.getenv("AWS_ACCOUNT_NUMBER"), region="us-east-2",),
 )
 
 app.synth()

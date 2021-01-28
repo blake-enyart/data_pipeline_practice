@@ -101,7 +101,7 @@ class StreamingDataPipelineS3Stack(core.Stack):
                 ),
                 encryption_configuration=kf.CfnDeliveryStream.EncryptionConfigurationProperty(
                     kms_encryption_config=kf.CfnDeliveryStream.KMSEncryptionConfigProperty(
-                        awskms_key_arn="arn:aws:kms:us-east-2:848684029682:alias/aws/s3"
+                        awskms_key_arn=f"arn:aws:kms:us-east-2:{self.account}:alias/aws/s3"
                     )
                 ),
                 data_format_conversion_configuration=kf.CfnDeliveryStream.DataFormatConversionConfigurationProperty(

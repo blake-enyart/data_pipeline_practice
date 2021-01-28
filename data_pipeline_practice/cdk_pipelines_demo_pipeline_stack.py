@@ -20,6 +20,7 @@ class CdkPipelinesDemoStack(core.Stack):
         cicd_pipeline = pipelines.CdkPipeline(
             self,
             "DemoPipeline",
+            cross_account_keys=os.getenv("AWS_ACCOUNT_NUMBER"),
             cloud_assembly_artifact=cloud_assembly_artifact,
             pipeline_name="DemoPipeline",
             source_action=cp_actions.GitHubSourceAction(
@@ -52,7 +53,7 @@ class CdkPipelinesDemoStack(core.Stack):
                 self,
                 "PreProd",
                 env=core.Environment(
-                    account="848684029682", region="us-east-2",
+                    account=os.getenv("AWS_ACCOUNT_NUMBER"), region="us-east-2",
                 ),
             ),
         )
@@ -80,9 +81,9 @@ class CdkPipelinesDemoStack(core.Stack):
                 self,
                 "Prod",
                 env=core.Environment(
-                    account="848684029682", region="us-east-1",
+                    account=os.getenv("AWS_ACCOUNT_NUMBER"), region="us-east-1",
                 ),
             ),
         )
 
-        prod_stage.deploys_stack(artifact_id=cloud_assembly_artifact.url)
+        # prod_stage.deploys_stack(artifact_id=cloud_assembly_artifact.url)
