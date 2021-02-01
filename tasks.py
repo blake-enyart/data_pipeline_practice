@@ -10,7 +10,7 @@ from invoke import task, Responder
 from klaxon import klaxon
 
 APP = "data_pipeline_practice"
-AWS_PROFILE = "personal"
+AWS_PROFILE = "default"
 AWS_REGION = "us-east-1"
 
 # Must separate these by spaces and indicate directories with trailing /
@@ -108,7 +108,7 @@ def diff(c, profile=AWS_PROFILE, region=AWS_REGION):
 
 
 @task
-def _list(c, profile=AWS_PROFILE):
+def ls(c, profile=AWS_PROFILE):
     """List of CDK stacks that are deployable"""
 
     c.run(f"cdk list --profile {profile}")

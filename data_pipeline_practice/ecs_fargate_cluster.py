@@ -40,17 +40,22 @@ class EcsFargateCluster(core.Construct):
         twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
             "TwitterCredentials",
-            secret_complete_arn="arn:aws:secretsmanager:us-east-2:848684029682:secret:BlakeEnyart/dev/dataPipelinePractice/TwitterAPI-JqFPsv",
+            secret_complete_arn="arn:aws:secretsmanager:us-east-1:251357961920:secret:dataPipelinePractice/TwitterAPI-CvLCOd",
         )
 
         ecs_task_definition = ecs.FargateTaskDefinition(
-            self, "FargateTaskDefinition", task_role=self._ecs_task_role,
+            self,
+            "FargateTaskDefinition",
+            task_role=self._ecs_task_role,
         )
 
         lg = logs.LogGroup(self, "EcsLogGroup")
-        log = ecs.AwsLogDriver(log_group=lg, stream_prefix="ecs",)
+        log = ecs.AwsLogDriver(
+            log_group=lg,
+            stream_prefix="ecs",
+        )
 
-        ecs_container_definition = ecs.ContainerDefinition(
+        ecs.ContainerDefinition(
             self,
             "EcsContainer",
             image=ecs.ContainerImage.from_asset(

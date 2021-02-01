@@ -17,6 +17,7 @@ from data_pipeline_practice.ecs_fargate_cluster import EcsFargateCluster
 
 GLUE_DB_NAME = "blake_enyart_test_database"
 GLUE_TABLE_NAME = "blake_enyart_twitter_data_2020"
+AWS_ACCOUNT_NUMBER = os.getenv("AWS_ACCOUNT_NUMBER")
 
 
 class StreamingDataPipelineS3Stack(core.Stack):
@@ -29,25 +30,34 @@ class StreamingDataPipelineS3Stack(core.Stack):
             self, "TwitterStreamStream", retention_period=core.Duration.days(3)
         )
         core.CfnOutput(
-            self, "KinesisDataStreamName", value=stream.stream_name,
+            self,
+            "KinesisDataStreamName",
+            value=stream.stream_name,
         )
 
         bucket = s3.Bucket.from_bucket_name(
-            self, "S3Bucket", bucket_name="nutrien-blake-enyart-dev",
+            self,
+            "S3Bucket",
+            bucket_name="nutrien-blake-enyart-dev",
         )
 
-        glue_db_arn = (
-            f"arn:aws:glue:us-east-2:{self.account}:database/{GLUE_DB_NAME}"
+        glue_db_arn = f"arn:aws:glue:us-east-2:{AWS_ACCOUNT_NUMBER}:database/{GLUE_DB_NAME}"
+
+        glue_table_arn = f"arn:aws:glue:us-east-2:{AWS_ACCOUNT_NUMBER}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}"
+        glue_catalog_arn = (
+            f"arn:aws:glue:us-east-2:{AWS_ACCOUNT_NUMBER}:catalog"
         )
-        glue_table_arn = f"arn:aws:glue:us-east-2:{self.account}:table/{GLUE_DB_NAME}/{GLUE_TABLE_NAME}"
-        glue_catalog_arn = f"arn:aws:glue:us-east-2:{self.account}:catalog"
 
         glue_db = glue.Database.from_database_arn(
-            self, "GlueDatabase", database_arn=glue_db_arn,
+            self,
+            "GlueDatabase",
+            database_arn=glue_db_arn,
         )
 
         glue_table = glue.Table.from_table_arn(
-            self, "GlueTable", table_arn=glue_table_arn,
+            self,
+            "GlueTable",
+            table_arn=glue_table_arn,
         )
 
         kinesis_fh_role = iam.Role(
@@ -101,7 +111,7 @@ class StreamingDataPipelineS3Stack(core.Stack):
                 ),
                 encryption_configuration=kf.CfnDeliveryStream.EncryptionConfigurationProperty(
                     kms_encryption_config=kf.CfnDeliveryStream.KMSEncryptionConfigProperty(
-                        awskms_key_arn=f"arn:aws:kms:us-east-2:{self.account}:alias/aws/s3"
+                        awskms_key_arn=f"arn:aws:kms:us-east-2:{AWS_ACCOUNT_NUMBER}:alias/aws/s3"
                     )
                 ),
                 data_format_conversion_configuration=kf.CfnDeliveryStream.DataFormatConversionConfigurationProperty(
@@ -133,12 +143,14 @@ class StreamingDataPipelineS3Stack(core.Stack):
             )
         )
 
-        data_pipeline = kinesis_data_pipeline.KinesisStreamsToKinesisFirehoseToS3(
-            self,
-            "MegaDataPipeline",
-            existing_stream_obj=stream,
-            existing_bucket_obj=bucket,
-            kinesis_firehose_props=kinesis_firehose_props,
+        data_pipeline = (
+            kinesis_data_pipeline.KinesisStreamsToKinesisFirehoseToS3(
+                self,
+                "MegaDataPipeline",
+                existing_stream_obj=stream,
+                existing_bucket_obj=bucket,
+                kinesis_firehose_props=kinesis_firehose_props,
+            )
         )
 
         vpc = ec2.Vpc(self, "VPC", max_azs=2)

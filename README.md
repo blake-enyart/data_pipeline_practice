@@ -39,12 +39,18 @@ Once the virtualenv is activated, you can install the required dependencies.
 $ poetry install
 ```
 
+Ensure that the pre-commit hooks are configured using the following command
+```
+$ inv install-hooks
+```
+
+
 Configure the `tasks.py` file such that the AWS_PROFILE is set to your AWS CLI profile which you want to work out of.
 
 At this point you can now determine the names of the available stacks.
 
 ```
-$ inv _list 
+$ inv ls
 ```
 From this list, synthesize the CloudFormation template for this code as follows.
 
@@ -52,17 +58,20 @@ From this list, synthesize the CloudFormation template for this code as follows.
 $ inv synth -s streaming-data-pipeline-s3-<username>
 ```
 
+At this point, you are ready to deploy the CDK application to AWS.
+```
+$ inv deploy -s streaming-data-pipeline-s3-<username>
+```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `setup.py` file and rerun the `poetry install`
-command.
+To add additional dependencies, for example other CDK libraries, just use
+`poetry add <library name>` command.
 
 ## Useful commands
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
+ * `inv ls`          list all stacks in the app
+ * `inv synth`       emits the synthesized CloudFormation template
+ * `inv deploy`      deploy this stack to your default AWS account/region
+ * `inv diff`        compare deployed stack with current state
  * `cdk docs`        open CDK documentation
 
 Enjoy!

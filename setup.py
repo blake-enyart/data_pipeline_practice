@@ -14,7 +14,9 @@ setuptools.setup(
     author="author",
     package_dir={"": "data_pipeline_practice"},
     packages=setuptools.find_packages(where="data_pipeline_practice"),
-    install_requires=["aws-cdk.core==1.74.0",],
+    install_requires=[
+        "aws-cdk.core==1.74.0",
+    ],
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 4 - Beta",
