@@ -36,6 +36,12 @@ def install_hooks(c):
 
     c.run("pre-commit install -t pre-push")
 
+    # Optionally install commitizen CLI
+    try:
+        c.run("commitizen", hide=True)
+    except:
+        c.run("npm install -g commitizen")
+
 
 @task
 def uninstall_hooks(c):
