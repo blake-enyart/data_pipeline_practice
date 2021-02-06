@@ -75,7 +75,8 @@ def publish_to_kinesis_stream(kinesis_records: list, stream_name: str):
 
     print(kinesis_records)
     kinesis_client.put_records(
-        Records=kinesis_records, StreamName=stream_name,
+        Records=kinesis_records,
+        StreamName=stream_name,
     )
 
 

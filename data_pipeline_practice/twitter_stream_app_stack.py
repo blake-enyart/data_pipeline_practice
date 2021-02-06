@@ -1,3 +1,4 @@
+import os
 from aws_cdk import (
     core,
     aws_ec2 as ec2,
@@ -5,14 +6,14 @@ from aws_cdk import (
     aws_secretsmanager as secretsmanager,
     aws_iam as iam,
     aws_logs as logs,
+    aws_kinesis as kinesis,
 )
 
-from aws_solutions_constructs import (
-    aws_kinesis_streams_kinesis_firehose_s3 as kinesis_data_pipeline,
-)
+ECR_REPO_NAME = "twitter-stream-app"
+TWITTER_CREDENTIALS_SSM_ARN = ""
 
 
-class EcsFargateCluster(core.Construct):
+class TwitterStreamAppStack(core.Stack):
     @property
     def ecs_task_role(self):
         return self._ecs_task_role
@@ -40,7 +41,7 @@ class EcsFargateCluster(core.Construct):
         twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
             "TwitterCredentials",
-            secret_complete_arn="arn:aws:secretsmanager:us-east-1:251357961920:secret:dataPipelinePractice/TwitterAPI-CvLCOd",
+            secret_complete_arn=TWITTER_CREDENTIALS_SSM_ARN,
         )
 
         ecs_task_definition = ecs.FargateTaskDefinition(
@@ -53,6 +54,10 @@ class EcsFargateCluster(core.Construct):
         log = ecs.AwsLogDriver(
             log_group=lg,
             stream_prefix="ecs",
+        )
+
+        kinesis_stream = kinesis.Stream.from_stream_arn(
+            self, "KinesisStream", stream_arn=os.getenv("KINESIS_STREAM_ARN")
         )
 
         ecs.ContainerDefinition(
