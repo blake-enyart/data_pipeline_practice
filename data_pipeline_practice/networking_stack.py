@@ -14,4 +14,6 @@ class NetworkingStack(core.Stack):
     ) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        _vpc = ec2.Vpc(self, "Vpc", max_azs=2)
+        self._vpc = ec2.Vpc(self, "Vpc", max_azs=2)
+
+        core.CfnOutput(self, "vpcId", value=self._vpc.vpc_id)

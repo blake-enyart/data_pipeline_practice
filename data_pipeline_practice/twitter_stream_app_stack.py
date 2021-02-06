@@ -9,8 +9,10 @@ from aws_cdk import (
     aws_kinesis as kinesis,
 )
 
-ECR_REPO_NAME = "twitter-stream-app"
-TWITTER_CREDENTIALS_SSM_ARN = ""
+ECR_REPO_NAME = (os.getenv("ECR_REPO_NAME", "twitter-stream-app"),)
+TWITTER_SECRET_ARN = (os.getenv("TWITTER_SECRET_ARN"),)
+VPC_ID = (os.getenv("VPC_ID", "vpc-0363aa9349f902c07"),)
+KINESIS_STREAM_ARN = os.getenv("KINESIS_STREAM_ARN")
 
 
 class TwitterStreamAppStack(core.Stack):
@@ -22,9 +24,6 @@ class TwitterStreamAppStack(core.Stack):
         self,
         scope: core.Construct,
         id: str,
-        vpc: ec2.IVpc,
-        ecr_repo_name: str,
-        data_pipeline: kinesis_data_pipeline,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
@@ -36,13 +35,21 @@ class TwitterStreamAppStack(core.Stack):
             description="ECS Task Definition role to publish to Kinesis Data Stream",
         )
 
-        ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
+        # vpc = ec2.Vpc.from_lookup(
+        #     self, "vpc", vpc_id="vpc-0363aa9349f902c07",
+        # )
 
         twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
             "TwitterCredentials",
-            secret_complete_arn=TWITTER_CREDENTIALS_SSM_ARN,
+            secret_complete_arn=TWITTER_SECRET_ARN,
         )
+
+        kinesis_stream = kinesis.Stream.from_stream_arn(
+            self, "KinesisStream", stream_arn=KINESIS_STREAM_ARN
+        )
+
+        ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
 
         ecs_task_definition = ecs.FargateTaskDefinition(
             self,
@@ -56,15 +63,11 @@ class TwitterStreamAppStack(core.Stack):
             stream_prefix="ecs",
         )
 
-        kinesis_stream = kinesis.Stream.from_stream_arn(
-            self, "KinesisStream", stream_arn=os.getenv("KINESIS_STREAM_ARN")
-        )
-
         ecs.ContainerDefinition(
             self,
             "EcsContainer",
             image=ecs.ContainerImage.from_asset(
-                "docker_images/twitter_stream_app"
+                "containers/twitter_stream_app"
             ),
             secrets={
                 "TWITTER_API_KEY": ecs.Secret.from_secrets_manager(
@@ -83,9 +86,7 @@ class TwitterStreamAppStack(core.Stack):
                     twitter_credentials, "TWITTER_SECRET_ACCESS_TOKEN"
                 ),
             },
-            environment={
-                "KINESIS_STREAM_NAME": data_pipeline.kinesis_stream.stream_name
-            },
+            environment={"KINESIS_STREAM_NAME": kinesis_stream.stream_name},
             task_definition=ecs_task_definition,
             logging=log,
         )
