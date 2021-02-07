@@ -21,7 +21,7 @@ BLACK_FILEPATH_STR = f"{APP}/ containers/ tests/"
 def clean(c):
     """Delete unused code."""
 
-    c.run("find . -name \*.pyc -delete")
+    c.run(r"find . -name \*.pyc -delete")
 
     c.run("rm shelves/*", warn=True)
 
@@ -135,6 +135,12 @@ def synth(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
         )
     else:
         print("Please provide a stack to deploy")
+
+
+@task
+def test(c):
+    """Runs test suite before committing code"""
+    c.run("pytest", pty=True)
 
 
 @task

@@ -52,14 +52,12 @@ class DataPipelineStack(core.Stack):
             )
         )
 
-        data_pipeline = (
-            kinesis_data_pipeline.KinesisStreamsToKinesisFirehoseToS3(
-                self,
-                "dataPipeline",
-                existing_stream_obj=self.kinesis_stream,
-                existing_bucket_obj=bucket,
-                kinesis_firehose_props=kf_props,
-            )
+        kinesis_data_pipeline.KinesisStreamsToKinesisFirehoseToS3(
+            self,
+            "dataPipeline",
+            existing_stream_obj=self.kinesis_stream,
+            existing_bucket_obj=bucket,
+            kinesis_firehose_props=kf_props,
         )
 
-        bucket.grant_write(data_pipeline.kinesis_firehose_role)
+        bucket.grant_write(kf_role)

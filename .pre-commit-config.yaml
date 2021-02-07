@@ -20,15 +20,15 @@ repos:
 
   # Uncomment for usage with invoke command for test suite
 
-  # - repo: local
-  #   hooks:
-  #     - id: tests
-  #       name: unit tests
-  #       language: system
-  #       entry: inv test
-  #       pass_filenames: false
-  #       stages:
-  #         - push
+  - repo: local
+    hooks:
+      - id: tests
+        name: unit tests
+        language: system
+        entry: inv test
+        pass_filenames: false
+        stages:
+          - push
 
   - repo: local
     hooks:
