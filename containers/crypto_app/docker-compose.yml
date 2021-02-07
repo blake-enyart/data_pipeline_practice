@@ -1,0 +1,10 @@
+version: "3.8"
+
+# Utilize docker-compose for local development and testing
+services:
+  app:
+    build:
+      # Builds an image from the Dockerfile in the current directory
+      context: .
+    env_file:
+      - crypto.env
