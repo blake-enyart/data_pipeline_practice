@@ -52,6 +52,7 @@ black = "^20.8b1"
 chalice = "^1.22.0"
 "aws-cdk.aws-kms" = "1.83.0"
 websockets = "^8.1"
+"aws-cdk.aws-cloudwatch" = "1.83.0"
 
 
 [tool.poetry.dev-dependencies]

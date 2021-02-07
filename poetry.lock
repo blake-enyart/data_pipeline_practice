@@ -2647,7 +2647,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "32d3b03cfb45319483ee96261fc1d0fd13a32544a8305987c5ecfc0c99264216"
+content-hash = "4fcad86e9a4924785cc36c03d217f401cb8e7aa5d2fbd4584af35af1d6bf20f0"
 
 [metadata.files]
 ansicon = [

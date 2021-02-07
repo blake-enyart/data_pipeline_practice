@@ -23,7 +23,7 @@ repos:
   - repo: local
     hooks:
       - id: tests
-        name: unit tests
+        name: Run test suite (Unit + Integration)
         language: system
         entry: inv test
         pass_filenames: false
