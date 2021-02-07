@@ -10,12 +10,12 @@ from aws_cdk import (
 )
 
 # ECR_REPO_NAME = os.getenv("ECR_REPO_NAME", "twitter-stream-app")
-TWITTER_SECRET_ARN = os.getenv("TWITTER_SECRET_ARN")
+API_CREDENTIALS_ARN = os.getenv("API_CREDENTIALS_ARN")
 # VPC_ID = os.getenv("VPC_ID", "vpc-0363aa9349f902c07")
 # KINESIS_STREAM_ARN = os.getenv("KINESIS_STREAM_ARN")
 
 
-class TwitterStreamAppStack(core.Stack):
+class StreamAppStack(core.Stack):
     @property
     def ecs_task_role(self):
         return self._ecs_task_role
@@ -37,10 +37,10 @@ class TwitterStreamAppStack(core.Stack):
             description="ECS Task Definition role to publish to Kinesis Data Stream",
         )
 
-        twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
+        api_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
-            "twitterCredentials",
-            secret_complete_arn=TWITTER_SECRET_ARN,
+            "apiCredentials",
+            secret_complete_arn=API_CREDENTIALS_ARN,
         )
 
         ecs_cluster = ecs.Cluster(self, "ecsCluster", vpc=vpc)
@@ -55,24 +55,27 @@ class TwitterStreamAppStack(core.Stack):
             self,
             "ecsContainer",
             image=ecs.ContainerImage.from_asset(
-                directory="containers/twitter_stream_app",
+                directory="containers/crypto_app",
             ),
             secrets={
-                "TWITTER_API_KEY": ecs.Secret.from_secrets_manager(
-                    twitter_credentials, "TWITTER_API_KEY"
+                "CRYPTO_COMPARE_API_KEY": ecs.Secret.from_secrets_manager(
+                    api_credentials, "CRYPTO_COMPARE_API_KEY"
                 ),
-                "TWITTER_SECRET_API_KEY": ecs.Secret.from_secrets_manager(
-                    twitter_credentials, "TWITTER_SECRET_API_KEY"
-                ),
-                "TWITTER_BEARER_TOKEN": ecs.Secret.from_secrets_manager(
-                    twitter_credentials, "TWITTER_BEARER_TOKEN"
-                ),
-                "TWITTER_ACCESS_TOKEN": ecs.Secret.from_secrets_manager(
-                    twitter_credentials, "TWITTER_ACCESS_TOKEN"
-                ),
-                "TWITTER_SECRET_ACCESS_TOKEN": ecs.Secret.from_secrets_manager(
-                    twitter_credentials, "TWITTER_SECRET_ACCESS_TOKEN"
-                ),
+                # "TWITTER_API_KEY": ecs.Secret.from_secrets_manager(
+                #     api_credentials, "TWITTER_API_KEY"
+                # ),
+                # "TWITTER_SECRET_API_KEY": ecs.Secret.from_secrets_manager(
+                #     api_credentials, "TWITTER_SECRET_API_KEY"
+                # ),
+                # "TWITTER_BEARER_TOKEN": ecs.Secret.from_secrets_manager(
+                #     api_credentials, "TWITTER_BEARER_TOKEN"
+                # ),
+                # "TWITTER_ACCESS_TOKEN": ecs.Secret.from_secrets_manager(
+                #     api_credentials, "TWITTER_ACCESS_TOKEN"
+                # ),
+                # "TWITTER_SECRET_ACCESS_TOKEN": ecs.Secret.from_secrets_manager(
+                #     api_credentials, "TWITTER_SECRET_ACCESS_TOKEN"
+                # ),
             },
             environment={"KINESIS_STREAM_NAME": kinesis_stream.stream_name},
             task_definition=ecs_task_definition,
