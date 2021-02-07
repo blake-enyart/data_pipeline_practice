@@ -6,7 +6,7 @@ from aws_cdk import (
 
 class NetworkingStack(core.Stack):
     @property
-    def ecs_task_role(self):
+    def vpc(self):
         return self._vpc
 
     def __init__(

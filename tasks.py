@@ -102,15 +102,18 @@ def destroy(
         print("Please provide a stack to deploy")
 
 
-@task
-def diff(c, profile=AWS_PROFILE, region=AWS_REGION):
+@task(optional=["stack"])
+def diff(c, profile=AWS_PROFILE, region=AWS_REGION, stack=None):
     """Compare current CDK stack to what was previously deployed."""
 
-    c.run(
-        f"cdk diff --profile={profile}",
-        pty=True,
-        env={"AWS_DEFAULT_REGION": region},
-    )
+    if stack:
+        c.run(
+            f"cdk diff --profile={profile} {stack}",
+            pty=True,
+            env={"AWS_DEFAULT_REGION": region},
+        )
+    else:
+        print("Please provide a stack to deploy")
 
 
 @task

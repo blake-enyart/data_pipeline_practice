@@ -9,10 +9,10 @@ from aws_cdk import (
     aws_kinesis as kinesis,
 )
 
-ECR_REPO_NAME = (os.getenv("ECR_REPO_NAME", "twitter-stream-app"),)
-TWITTER_SECRET_ARN = (os.getenv("TWITTER_SECRET_ARN"),)
-VPC_ID = (os.getenv("VPC_ID", "vpc-0363aa9349f902c07"),)
-KINESIS_STREAM_ARN = os.getenv("KINESIS_STREAM_ARN")
+# ECR_REPO_NAME = os.getenv("ECR_REPO_NAME", "twitter-stream-app")
+TWITTER_SECRET_ARN = os.getenv("TWITTER_SECRET_ARN")
+# VPC_ID = os.getenv("VPC_ID", "vpc-0363aa9349f902c07")
+# KINESIS_STREAM_ARN = os.getenv("KINESIS_STREAM_ARN")
 
 
 class TwitterStreamAppStack(core.Stack):
@@ -24,50 +24,38 @@ class TwitterStreamAppStack(core.Stack):
         self,
         scope: core.Construct,
         id: str,
+        vpc: ec2.IVpc,
+        kinesis_stream: kinesis.IStream,
         **kwargs,
     ) -> None:
         super().__init__(scope, id, **kwargs)
 
         self._ecs_task_role = iam.Role(
             self,
-            "EcsTaskRole",
+            "ecsTaskRole",
             assumed_by=iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
             description="ECS Task Definition role to publish to Kinesis Data Stream",
         )
 
-        # vpc = ec2.Vpc.from_lookup(
-        #     self, "vpc", vpc_id="vpc-0363aa9349f902c07",
-        # )
-
         twitter_credentials = secretsmanager.Secret.from_secret_complete_arn(
             self,
-            "TwitterCredentials",
+            "twitterCredentials",
             secret_complete_arn=TWITTER_SECRET_ARN,
         )
 
-        kinesis_stream = kinesis.Stream.from_stream_arn(
-            self, "KinesisStream", stream_arn=KINESIS_STREAM_ARN
-        )
-
-        ecs_cluster = ecs.Cluster(self, "MyCluster", vpc=vpc)
+        ecs_cluster = ecs.Cluster(self, "ecsCluster", vpc=vpc)
 
         ecs_task_definition = ecs.FargateTaskDefinition(
             self,
-            "FargateTaskDefinition",
+            "fargateTaskDefinition",
             task_role=self._ecs_task_role,
-        )
-
-        lg = logs.LogGroup(self, "EcsLogGroup")
-        log = ecs.AwsLogDriver(
-            log_group=lg,
-            stream_prefix="ecs",
         )
 
         ecs.ContainerDefinition(
             self,
-            "EcsContainer",
+            "ecsContainer",
             image=ecs.ContainerImage.from_asset(
-                "containers/twitter_stream_app"
+                directory="containers/twitter_stream_app",
             ),
             secrets={
                 "TWITTER_API_KEY": ecs.Secret.from_secrets_manager(
@@ -88,12 +76,14 @@ class TwitterStreamAppStack(core.Stack):
             },
             environment={"KINESIS_STREAM_NAME": kinesis_stream.stream_name},
             task_definition=ecs_task_definition,
-            logging=log,
+            logging=ecs.LogDriver.aws_logs(stream_prefix="ecs"),
         )
 
         ecs.FargateService(
             self,
-            "FargateService",
+            "fargateService",
             task_definition=ecs_task_definition,
             cluster=ecs_cluster,
         )
+
+        kinesis_stream.grant_read_write(ecs_task_definition.task_role)
