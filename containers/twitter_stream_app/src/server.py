@@ -20,6 +20,7 @@ def create_url():
 
 def create_headers(bearer_token):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
+    print(headers)
     return headers
 
 
@@ -34,6 +35,7 @@ def connect_to_endpoint(url, headers):
         "GET", url, headers=headers, stream=True, params=params
     )
     print(response.status_code)
+    print(response.text)
     kinesis_records = []
     shard_count = 1
 
@@ -54,7 +56,8 @@ def connect_to_endpoint(url, headers):
                 publish_to_kinesis_stream(kinesis_records, KINESIS_STREAM_NAME)
                 kinesis_records = []
     if response.status_code == 429:
-        time.sleep(180)
+        # Wait 5 minutes for rate limiting
+        time.sleep(300)
     elif response.status_code != 200:
         raise Exception(
             "Request returned an error: {} {}".format(

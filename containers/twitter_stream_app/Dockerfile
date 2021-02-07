@@ -1,17 +1,14 @@
 # set base image (host OS)
-FROM python:3.9
+FROM python:3.8
 
 # set the working directory in the container
 WORKDIR /usr/src/app
 
 # copy the dependencies file to the working directory
-COPY Pipfile* ./
+COPY requirements.txt ./
 
-# install pipenv
-RUN pip install pipenv
-
-# install required libraries based on Pipfile
-RUN pipenv install --system --deploy
+# install required libraries
+RUN pip install -r requirements.txt
 
 # copy the content of the local src directory to the working directory
 COPY src/ .
