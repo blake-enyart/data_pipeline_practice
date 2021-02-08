@@ -66,15 +66,14 @@ def connect_to_endpoint(url, headers):
         )
 
 
+"""
+TO-DO: Create unit test similar to crypto_app testing.
+This will break in local testing in the current arrangement
+"""
+
+
 def publish_to_kinesis_stream(kinesis_records: list, stream_name: str):
-    if LOCAL_DEV:
-        session = boto3.session.Session(
-            aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-        )
-        kinesis_client = session.client("kinesis", "us-east-2")
-    else:
-        kinesis_client = boto3.client("kinesis", "us-east-2")
+    kinesis_client = boto3.client("kinesis", "us-east-2")
 
     print(kinesis_records)
     kinesis_client.put_records(

@@ -16,6 +16,10 @@ from data_pipeline_practice.stream_app_stack import (
     StreamAppStack,
 )
 
+from data_pipeline_practice.monitoring_stack import (
+    MonitoringStack,
+)
+
 USERNAME = getpass.getuser()
 STAGE = os.getenv("STAGE", "dev")
 
@@ -42,7 +46,14 @@ stream_app = StreamAppStack(
     kinesis_stream=data_pipeline_stack.kinesis_stream,
 )
 
-stacks = [networking_stack, data_pipeline_stack, stream_app]
+monitoring_stack = MonitoringStack(
+    app,
+    f"monitoring-{USERNAME}-{STAGE}",
+    kinesis_firehose=data_pipeline_stack.kinesis_firehose,
+    env=default_env,
+)
+
+stacks = [networking_stack, data_pipeline_stack, stream_app, monitoring_stack]
 
 # Add tags to multistack deployment
 for stack in stacks:
