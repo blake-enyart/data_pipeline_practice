@@ -5,7 +5,7 @@ This project is a data pipeline illustrating some of the best practices in pipel
 
 Ultimately, this project is here to illustrate just what is possible when leveraging the AWS CDK to further the goal of combining infrastucture, CI/CD, and development into a singular practice gaining popularity known as DataOps.
 
-Initially, this project was developed as a single stack. As the complexity grew, I decided to break the project into several stacks with inter-stack dependencies. All of this is governed by the constraint that all stacks are within the same account and region. Once, I broke the project up into several stacks, I opted to introduce a [monitoring stack](../blob/main/data_pipeline_practice/monitoring_stack.py) which functions to create a CloudWatch alarm which monitors the throughput of the Kinesis Firehose created in the [data pipeline stack](../blob/main/data_pipeline_practice/data_pipeline_stack.py).
+Initially, this project was developed as a single stack. As the complexity grew, I decided to break the project into several stacks with inter-stack dependencies. All of this is governed by the constraint that all stacks are within the same account and region. Once, I broke the project up into several stacks, I opted to introduce a [monitoring stack](../main/data_pipeline_practice/monitoring_stack.py) which functions to create a CloudWatch alarm which monitors the throughput of the Kinesis Firehose created in the [data pipeline stack](../main/data_pipeline_practice/data_pipeline_stack.py).
 
 Below is the reference architecture for this project. All of this was developed over the course of a weekend. Hopefully, this illustrates some of the strengths of combining infrastructure and development into a singular practice.
 
