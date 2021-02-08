@@ -63,11 +63,7 @@ At this point you can now determine the names of the available stacks.
 ```
 $ inv ls
 ```
-It is recommended that you deploy the stacks in the following order using `inv deploy -s <stack name>`:
-* `networking-<username>-<stage>`
-* `data-pipeline-<username>-<stage>`
-* `stream-app-<username>-<stage>`
-* `monitoring-<username>-<stage>`
+To deploy the stacks, just use `cdk deploy --all --profile <profile name>` which will stand-up all the necessary infrastructure for the CDK Data Pipeline.
 
 To add additional dependencies, for example other CDK libraries, just use
 `poetry add <library name>` command.
