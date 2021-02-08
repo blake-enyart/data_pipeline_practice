@@ -1,16 +1,20 @@
 
-# Welcome to your CDK Python project!
+# Welcome to the CDK Data Pipeline!
 
-This is a blank project for Python development with CDK.
+This project is a data pipeline illustrating some of the best practices in pipeline manage such as: unit testing, monitoring and observability, and serverless archiecture. This project is built utilizing CDK(Python), Docker, Former2, and the AWS Console Recorder.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+Ultimately, this project is here to illustrate just what is possible when leveraging the AWS CDK to further the goal of combining infrastucture, CI/CD, and development into a singular practice gaining popularity known as DataOps.
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+Initially, this project was developed as a single stack. As the complexity grew, I decided to break the project into several stacks with inter-stack dependencies. All of this is governed by the constraint that all stacks are within the same account and region. Once, I broke the project up into several stacks, I opted to introduce a [monitoring stack](../blob/main/data_pipeline_practice/monitoring_stack.py) which functions to create a CloudWatch alarm which monitors the throughput of the Kinesis Firehose created in the [data pipeline stack](../blob/main/data_pipeline_practice/data_pipeline_stack.py).
+
+Below is the reference architecture for this project. All of this was developed over the course of a weekend. Hopefully, this illustrates some of the strengths of combining infrastructure and development into a singular practice.
+
+## Reference Architecture
+<p align="center">
+    <img src=static/images/Reference%20Architectures%20-%20Data%20Pipeline%20-%20Architecture.jpg  width="400" height="350" alt="Reference Architecture">
+</p>
+
+## Getting Started
 
 Prior to configuring your virtualenv, ensure you have the [invoke](http://www.pyinvoke.org/) and [poetry](https://python-poetry.org/) libraries installed globally for your python version.
 
@@ -36,6 +40,7 @@ If you are a Windows platform, you would activate the virtualenv like this:
 Once the virtualenv is activated, you can install the required dependencies.
 
 ```
+$ pip install -r requirements.txt
 $ poetry install
 ```
 
@@ -43,7 +48,13 @@ Ensure that the pre-commit hooks are configured using the following command
 ```
 $ inv install-hooks
 ```
-
+Note: this git workflow will now look something like:
+* `git add <file>`
+* `git commit`
+* `git add .` -- if there are code corrections
+* `git commit` -- to verify that the pre-commit hooks are resolved
+* `:q` -- to exit the message prompt and utilize the more robust command below
+* `git cz` -- to make a descriptive commit to the repo
 
 Configure the `tasks.py` file such that the AWS_PROFILE is set to your AWS CLI profile which you want to work out of.
 
@@ -52,16 +63,11 @@ At this point you can now determine the names of the available stacks.
 ```
 $ inv ls
 ```
-From this list, synthesize the CloudFormation template for this code as follows.
-
-```
-$ inv synth -s streaming-data-pipeline-s3-<username>
-```
-
-At this point, you are ready to deploy the CDK application to AWS.
-```
-$ inv deploy -s streaming-data-pipeline-s3-<username>
-```
+It is recommended that you deploy the stacks in the following order using `inv deploy -s <stack name>`:
+* `networking-<username>-<stage>`
+* `data-pipeline-<username>-<stage>`
+* `stream-app-<username>-<stage>`
+* `monitoring-<username>-<stage>`
 
 To add additional dependencies, for example other CDK libraries, just use
 `poetry add <library name>` command.
